@@ -1,0 +1,12 @@
+{
+  "name": "j4x-os-render",
+  "version": "6.6.6",
+  "description": "Ne pas toucher, c'est sensible",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

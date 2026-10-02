@@ -1,0 +1,194 @@
+/* 
+  J4X OS - Stylesheet
+  Auteur: J4X
+  Note: Attention au z-index de l'iframe YouTube pour qu'il reste au premier plan.
+*/
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+
+:root {
+  --green: #20C20E;
+  --bg: #000000;
+  --font: 'Courier Prime', Courier, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--term-font) !important;
+}
+
+body {
+  background-color: var(--bg);
+  /* Effet de grille discret */
+  background-image: 
+    linear-gradient(rgba(32, 194, 14, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 194, 14, 0.03) 1px, transparent 1px);
+  background-size: 100% 4px, 4px 100%;
+  color: var(--green);
+  font-family: var(--font);
+  font-size: 26px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  padding: 40px;
+  /* Effet vignette cinéma */
+  box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
+  min-height: 100vh;
+}
+
+/* Écrans */
+.screen {
+  display: none;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* Accueil */
+.center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  cursor: pointer;
+  letter-spacing: 2px;
+}
+
+.blink {
+  animation: blinker 1s step-end infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0; }
+}
+
+/* Terminal Output */
+#gotham-header {
+  font-size: 20px;
+  opacity: 0.6;
+  margin-bottom: 40px;
+  line-height: 1.2;
+}
+
+#output {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 10;
+}
+
+.line {
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fade-in 0.1s forwards;
+  text-shadow: none;
+}
+
+.line.system {
+  color: #1a9e0b;
+}
+
+.line.echo {
+  color: #39ff28;
+}
+
+/* J'ai du enlever le gras ici sinon la police Courier devenait super moche */
+.line.question {
+  font-size: 28px;
+  margin: 40px 0;
+  letter-spacing: 1px;
+}
+
+/* BOOM LE COUP DE FLIP */
+.line.alert {
+  color: #ff1111;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.line.alert-massive {
+  color: #ff0000;
+  font-size: 38px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin: 50px 0;
+  text-align: center;
+  text-shadow: 0 0 10px #ff0000;
+  animation: shake 0.3s infinite;
+}
+
+/* STYLES DES DONNÉES CENSURÉES */
+.line.alert-glitch {
+  color: #ff3333;
+  font-size: 26px;
+  font-weight: bold;
+  animation: data-glitch 0.15s infinite;
+  text-shadow: 2px 0 cyan, -2px 0 magenta;
+}
+
+@keyframes data-glitch {
+  0% { opacity: 1; transform: translateX(0); }
+  25% { opacity: 0.8; transform: translateX(-2px); text-shadow: -2px 0 cyan, 2px 0 magenta; }
+  50% { opacity: 0.4; transform: translateX(2px); }
+  75% { opacity: 0.9; transform: translateX(-1px); }
+  100% { opacity: 1; transform: translateX(1px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 2px); }
+  50% { transform: translate(2px, -2px); }
+  75% { transform: translate(2px, 2px); }
+}
+
+@keyframes fade-in {
+  to { opacity: 1; }
+}
+
+/* Input Area - à ne surtout pas toucher */
+.hidden {
+  display: none !important;
+}
+
+#input-line {
+  display: flex;
+  align-items: center;
+  color: #39ff28;
+  position: relative;
+  z-index: 10;
+}
+
+.prompt {
+  margin-right: 10px;
+}
+
+.cursor {
+  display: inline-block;
+  width: 16px;
+  height: 30px;
+  background-color: var(--green);
+  animation: blinker 1s step-end infinite;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+}
+
+/* Responsive vite fait */
+@media (max-width: 768px) {
+  body {
+    font-size: 18px;
+    padding: 20px;
+  }
+  .line.question {
+    font-size: 22px;
+  }
+  .cursor {
+    height: 22px;
+    width: 12px;
+  }
+}
