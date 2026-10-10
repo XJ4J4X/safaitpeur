@@ -621,18 +621,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     
     document.body.innerHTML = `
-      <div id="nightmare-screen" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:black;color:#ff0000;font-family:'Courier New', Courier, monospace;z-index:999999;overflow:hidden;cursor:none;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+      <div id="nightmare-screen" style="position:fixed; top:0; left:0; right:0; bottom:0; background-color:black; z-index:999999; overflow:hidden; cursor:none;">
         
         <!-- Spam de texte en fond -->
-        <div id="creepy-spam" style="position:absolute;top:0;left:0;width:100%;height:100%;font-size:28px;line-height:1.1;opacity:0.35;word-wrap:break-word;font-weight:bold;color:red;pointer-events:none;"></div>
+        <div id="creepy-spam" style="position:absolute; top:0; left:0; right:0; bottom:0; font-family:'Courier New', Courier, monospace; font-size:28px; line-height:1.1; opacity:0.35; word-wrap:break-word; font-weight:bold; color:red; pointer-events:none;"></div>
         
         <!-- Effet stroboscopique rouge/noir -->
-        <div id="strobe" style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:red;mix-blend-mode:overlay;animation:strobe 0.1s infinite;pointer-events:none;"></div>
+        <div id="strobe" style="position:absolute; top:0; left:0; right:0; bottom:0; background-color:red; mix-blend-mode:overlay; animation:strobe 0.1s infinite; pointer-events:none;"></div>
         
-        <!-- Message central géant -->
-        <div style="z-index:10;text-align:center;animation:shake 0.15s infinite;background:rgba(0,0,0,0.8);padding:40px;border: 5px solid red;box-shadow: 0 0 50px red;">
-          <h1 style="font-size:clamp(40px, 8vw, 120px); margin:0; animation: glitch-text 0.1s infinite; text-shadow: 0 0 20px red;">NE TE RETOURNE PAS</h1>
-          <h2 style="font-size:clamp(20px, 4vw, 60px); color:white; margin:20px 0; animation: glitch-text 0.15s infinite;">IL EST LÀ</h2>
+        <!-- Conteneur centré proprement avec Flexbox -->
+        <div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; z-index:10; pointer-events:none;">
+          <!-- Élément qui tremble indépendamment du centrage -->
+          <div style="text-align:center; animation:shake 0.15s infinite; background:rgba(0,0,0,0.8); padding:40px 60px; border:5px solid red; box-shadow:0 0 50px red; max-width:90%;">
+            <h1 style="font-family:'Courier New', Courier, monospace; font-size:clamp(40px, 8vw, 120px); margin:0; color:#ff0000; animation:glitch-text 0.1s infinite; text-shadow:0 0 20px red;">NE TE RETOURNE PAS</h1>
+            <h2 style="font-family:'Courier New', Courier, monospace; font-size:clamp(20px, 4vw, 60px); margin:20px 0 0 0; color:white; animation:glitch-text 0.15s infinite;">IL EST LÀ</h2>
+          </div>
         </div>
       </div>
     `;
@@ -645,11 +648,11 @@ document.addEventListener("DOMContentLoaded", () => {
         60%, 100% { opacity: 0; filter: invert(0%); }
       }
       @keyframes shake {
-        0% { transform: translate(-50%, -50%) rotate(0deg); }
-        25% { transform: translate(-52%, -48%) rotate(-2deg); }
-        50% { transform: translate(-48%, -52%) rotate(2deg); }
-        75% { transform: translate(-51%, -49%) rotate(-1deg); }
-        100% { transform: translate(-50%, -50%) rotate(0deg); }
+        0% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(-10px, 10px) rotate(-2deg); }
+        50% { transform: translate(10px, -10px) rotate(2deg); }
+        75% { transform: translate(-10px, -10px) rotate(-1deg); }
+        100% { transform: translate(0, 0) rotate(0deg); }
       }
       @keyframes glitch-text {
         0% { transform: skewX(0deg); text-shadow: 5px 5px red; }
@@ -658,7 +661,7 @@ document.addEventListener("DOMContentLoaded", () => {
         75% { transform: skewX(-10deg); text-shadow: 5px 5px red; }
         100% { transform: skewX(0deg); text-shadow: -5px 5px white; }
       }
-      body { animation: body-shake 0.1s infinite; background-color: black !important; }
+      body { animation: body-shake 0.1s infinite; background-color: black !important; margin: 0; padding: 0; overflow: hidden; }
       @keyframes body-shake {
         0%, 100% { transform: translate(0, 0); }
         50% { transform: translate(10px, 10px); }
