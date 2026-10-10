@@ -194,7 +194,7 @@ const ENIGMES = [
     id: 10,
     etape: "ÉTAPE 10 // FIN DE LIVE",
     secteur: "L'ÉCRAN DE FIN DE STREAM",
-    histoire: "Le live est sur le point de s'achever. Aminato dit 'Toucher !' une dernière fois. Pour clôturer le stream, il faut lancer la horde de fantômes chez un autre streamer.",
+    histoire: "Le live est sur le point de s'achever. Pour clôturer le stream, il faut lancer la horde de fantômes chez un autre streamer.",
     question: "CLÔTURE DU STREAM :\nQuelle est cette action finale pour envoyer tous nos fantômes terrifier une autre chaîne Twitch ?",
     reponses: [
       "raid fantomatique",
