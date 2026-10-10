@@ -611,45 +611,28 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { capture: true });
 
   const declencherHackSysteme = () => {
-    // Tous les sons d'horreur en même temps
+    // Tous les sons d'horreur en boucle
     if (window.audioTerminal) {
       window.audioTerminal.jouerRireDiabolique();
       window.audioTerminal.jouerTonnerre();
-      setInterval(() => window.audioTerminal.jouerErreurGlitch(), 600);
-      setInterval(() => window.audioTerminal.jouerMurmureFantome(), 2000);
-      setInterval(() => window.audioTerminal.jouerAlarmeDharma(), 3000);
+      setInterval(() => window.audioTerminal.jouerErreurGlitch(), 400);
+      setInterval(() => window.audioTerminal.jouerMurmureFantome(), 1500);
+      setInterval(() => window.audioTerminal.jouerAlarmeDharma(), 2500);
     }
     
     document.body.innerHTML = `
-      <div id="nightmare-screen" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:black;color:#ff0000;font-family:'Courier New', monospace;z-index:999999;overflow:hidden;cursor:none;">
-        <div id="strobe" style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:red;mix-blend-mode:overlay;animation:strobe 0.15s infinite;"></div>
-        <div id="creepy-spam" style="position:absolute;top:0;left:0;width:100%;height:100%;font-size:24px;line-height:1;opacity:0.4;word-break:break-all;"></div>
+      <div id="nightmare-screen" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:black;color:#ff0000;font-family:'Courier New', Courier, monospace;z-index:999999;overflow:hidden;cursor:none;display:flex;flex-direction:column;align-items:center;justify-content:center;">
         
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);text-align:center;animation:shake 0.2s infinite;">
-          <pre style="font-size:clamp(8px, 1.2vw, 16px); font-weight:bold; color:#ff0000; text-shadow: 0 0 10px red; line-height: 1.1; margin:0;">
-        .                                                      .
-      .n                   .                 .                  n.
-  . .dP                  dP                   9b                 9b. .
- 4    qXb         .       dX                     Xb       .        dXp     t
-dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb
-9XXb._       _.dXXXXb dXXXXbo.                 .odXXXXb dXXXXb._       _.dXXP
- 9XXXXXXXXXXXXXXXXXXXVXXXXXXXXOo.           .oOXXXXXXXXVXXXXXXXXXXXXXXXXXXXP
-  \`9XXXXXXXXXXXXXXXXXXXXX'~   ~OOO8b   d8OOO~   ~'XXXXXXXXXXXXXXXXXXXXXP'
-    \`9XXXXXXXXXXXP' \`9XX'   DIE    \`98v8P'  DIE    \`XXP' \`9XXXXXXXXXXXP'
-        ~~~~~~~       9X.          .db|db.          .XP       ~~~~~~~
-                        )b.  .dbo.dP'v\`9b.odb.  .dX(
-                      ,dXXXXXXXXXXXb     dXXXXXXXXXXXb.
-                     dXXXXXXXXXXXP'   .   \`9XXXXXXXXXXXb
-                    dXXXXXXXXXXXXb   d|b   dXXXXXXXXXXXXb
-                    9XXb'   \`XXXXXb.dX|Xb.dXXXXX'   \`dXXP
-                     \`'      9XXXXXX(   )XXXXXXP      \`'
-                              XXXX X.v.X XXXX
-                              XP^X' b   d \`X^XX
-                              X. 9  \`   '  P )X
-                              \`b  \`       '  d'
-                               \`             '
-          </pre>
-          <h1 style="font-size:clamp(30px, 6vw, 80px); margin-top:20px; animation: glitch-text 0.3s infinite;">NE TE RETOURNE PAS</h1>
+        <!-- Spam de texte en fond -->
+        <div id="creepy-spam" style="position:absolute;top:0;left:0;width:100%;height:100%;font-size:28px;line-height:1.1;opacity:0.35;word-wrap:break-word;font-weight:bold;color:red;pointer-events:none;"></div>
+        
+        <!-- Effet stroboscopique rouge/noir -->
+        <div id="strobe" style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:red;mix-blend-mode:overlay;animation:strobe 0.1s infinite;pointer-events:none;"></div>
+        
+        <!-- Message central géant -->
+        <div style="z-index:10;text-align:center;animation:shake 0.15s infinite;background:rgba(0,0,0,0.8);padding:40px;border: 5px solid red;box-shadow: 0 0 50px red;">
+          <h1 style="font-size:clamp(40px, 8vw, 120px); margin:0; animation: glitch-text 0.1s infinite; text-shadow: 0 0 20px red;">NE TE RETOURNE PAS</h1>
+          <h2 style="font-size:clamp(20px, 4vw, 60px); color:white; margin:20px 0; animation: glitch-text 0.15s infinite;">IL EST LÀ</h2>
         </div>
       </div>
     `;
@@ -658,40 +641,45 @@ dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb
     styleGlitch.innerHTML = `
       @keyframes strobe {
         0%, 40% { opacity: 0; filter: invert(0%); }
-        50% { opacity: 1; filter: invert(100%); }
+        50% { opacity: 1; filter: invert(100%); background-color: white; }
         60%, 100% { opacity: 0; filter: invert(0%); }
       }
       @keyframes shake {
         0% { transform: translate(-50%, -50%) rotate(0deg); }
-        25% { transform: translate(-51%, -49%) rotate(-1deg); }
-        50% { transform: translate(-49%, -51%) rotate(1deg); }
-        75% { transform: translate(-52%, -48%) rotate(2deg); }
+        25% { transform: translate(-52%, -48%) rotate(-2deg); }
+        50% { transform: translate(-48%, -52%) rotate(2deg); }
+        75% { transform: translate(-51%, -49%) rotate(-1deg); }
         100% { transform: translate(-50%, -50%) rotate(0deg); }
       }
       @keyframes glitch-text {
-        0% { transform: skewX(0deg); text-shadow: 2px 2px red; }
-        20% { transform: skewX(-20deg); text-shadow: -5px -5px blue; }
-        40% { transform: skewX(20deg); text-shadow: 5px 5px green; }
-        60% { transform: skewX(0deg); text-shadow: 2px 2px red; }
+        0% { transform: skewX(0deg); text-shadow: 5px 5px red; }
+        25% { transform: skewX(-30deg); text-shadow: -10px -10px blue; }
+        50% { transform: skewX(30deg); text-shadow: 10px 10px green; }
+        75% { transform: skewX(-10deg); text-shadow: 5px 5px red; }
+        100% { transform: skewX(0deg); text-shadow: -5px 5px white; }
       }
       body { animation: body-shake 0.1s infinite; background-color: black !important; }
       @keyframes body-shake {
         0%, 100% { transform: translate(0, 0); }
-        50% { transform: translate(5px, 5px); }
+        50% { transform: translate(10px, 10px); }
       }
     `;
     document.head.appendChild(styleGlitch);
 
     const hackText = document.getElementById("creepy-spam");
-    const mots = ["MORT ", "SANG ", "DERRIÈRE TOI ", "REGARDE ", "FUI ", "TROP TARD ", "666 ", "SOUFFRE ", "IL TE VOIT ", "CRÈVE "];
+    const mots = ["MORT ", "SANG ", "DERRIÈRE TOI ", "REGARDE ", "FUI ", "TROP TARD ", "666 ", "SOUFFRE ", "IL TE VOIT ", "CRÈVE ", "DHARMA "];
     
+    // Remplissage initial de tout l'écran
+    let initialSpam = "";
+    for (let i = 0; i < 800; i++) {
+      initialSpam += mots[Math.floor(Math.random() * mots.length)];
+    }
+    hackText.textContent = initialSpam;
+
     setInterval(() => {
       let batch = "";
-      for (let i = 0; i < 40; i++) batch += mots[Math.floor(Math.random() * mots.length)];
-      hackText.textContent = batch + hackText.textContent;
-      if (hackText.textContent.length > 2000) {
-        hackText.textContent = hackText.textContent.substring(0, 2000);
-      }
-    }, 40);
+      for (let i = 0; i < 20; i++) batch += mots[Math.floor(Math.random() * mots.length)];
+      hackText.textContent = batch + hackText.textContent.substring(0, 4000);
+    }, 50);
   };
 });
