@@ -611,49 +611,87 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { capture: true });
 
   const declencherHackSysteme = () => {
+    // Tous les sons d'horreur en même temps
     if (window.audioTerminal) {
-      window.audioTerminal.jouerErreurGlitch();
-      window.audioTerminal.jouerAlarmeDharma();
+      window.audioTerminal.jouerRireDiabolique();
+      window.audioTerminal.jouerTonnerre();
+      setInterval(() => window.audioTerminal.jouerErreurGlitch(), 600);
+      setInterval(() => window.audioTerminal.jouerMurmureFantome(), 2000);
+      setInterval(() => window.audioTerminal.jouerAlarmeDharma(), 3000);
     }
     
     document.body.innerHTML = `
-      <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:#050000;color:red;font-family:monospace;font-size:16px;padding:20px;box-sizing:border-box;z-index:99999;overflow:hidden;">
-        <h1 style="text-align:center;font-size:clamp(30px, 8vw, 80px);margin-top:20vh;animation:glitch 0.1s infinite, text-shadow-glitch 2s infinite;">FATAL SYSTEM OVERRIDE</h1>
-        <p style="text-align:center;font-size:24px;color:#ff4444;animation:blink 0.5s infinite;">BREACH DETECTED - STATION COMPROMISED</p>
-        <div id="hack-matrix" style="word-break:break-all;opacity:0.8;margin-top:40px;line-height:1.2;"></div>
+      <div id="nightmare-screen" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:black;color:#ff0000;font-family:'Courier New', monospace;z-index:999999;overflow:hidden;cursor:none;">
+        <div id="strobe" style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:red;mix-blend-mode:overlay;animation:strobe 0.15s infinite;"></div>
+        <div id="creepy-spam" style="position:absolute;top:0;left:0;width:100%;height:100%;font-size:24px;line-height:1;opacity:0.4;word-break:break-all;"></div>
+        
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);text-align:center;animation:shake 0.2s infinite;">
+          <pre style="font-size:clamp(8px, 1.2vw, 16px); font-weight:bold; color:#ff0000; text-shadow: 0 0 10px red; line-height: 1.1; margin:0;">
+        .                                                      .
+      .n                   .                 .                  n.
+  . .dP                  dP                   9b                 9b. .
+ 4    qXb         .       dX                     Xb       .        dXp     t
+dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb
+9XXb._       _.dXXXXb dXXXXbo.                 .odXXXXb dXXXXb._       _.dXXP
+ 9XXXXXXXXXXXXXXXXXXXVXXXXXXXXOo.           .oOXXXXXXXXVXXXXXXXXXXXXXXXXXXXP
+  \`9XXXXXXXXXXXXXXXXXXXXX'~   ~OOO8b   d8OOO~   ~'XXXXXXXXXXXXXXXXXXXXXP'
+    \`9XXXXXXXXXXXP' \`9XX'   DIE    \`98v8P'  DIE    \`XXP' \`9XXXXXXXXXXXP'
+        ~~~~~~~       9X.          .db|db.          .XP       ~~~~~~~
+                        )b.  .dbo.dP'v\`9b.odb.  .dX(
+                      ,dXXXXXXXXXXXb     dXXXXXXXXXXXb.
+                     dXXXXXXXXXXXP'   .   \`9XXXXXXXXXXXb
+                    dXXXXXXXXXXXXb   d|b   dXXXXXXXXXXXXb
+                    9XXb'   \`XXXXXb.dX|Xb.dXXXXX'   \`dXXP
+                     \`'      9XXXXXX(   )XXXXXXP      \`'
+                              XXXX X.v.X XXXX
+                              XP^X' b   d \`X^XX
+                              X. 9  \`   '  P )X
+                              \`b  \`       '  d'
+                               \`             '
+          </pre>
+          <h1 style="font-size:clamp(30px, 6vw, 80px); margin-top:20px; animation: glitch-text 0.3s infinite;">NE TE RETOURNE PAS</h1>
+        </div>
       </div>
     `;
 
     const styleGlitch = document.createElement("style");
     styleGlitch.innerHTML = `
-      @keyframes glitch {
-        0% { transform: translate(0) }
-        20% { transform: translate(-4px, 4px) }
-        40% { transform: translate(-4px, -4px) }
-        60% { transform: translate(4px, 4px) }
-        80% { transform: translate(4px, -4px) }
-        100% { transform: translate(0) }
+      @keyframes strobe {
+        0%, 40% { opacity: 0; filter: invert(0%); }
+        50% { opacity: 1; filter: invert(100%); }
+        60%, 100% { opacity: 0; filter: invert(0%); }
       }
-      @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
+      @keyframes shake {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        25% { transform: translate(-51%, -49%) rotate(-1deg); }
+        50% { transform: translate(-49%, -51%) rotate(1deg); }
+        75% { transform: translate(-52%, -48%) rotate(2deg); }
+        100% { transform: translate(-50%, -50%) rotate(0deg); }
       }
-      body { background-color: black !important; }
+      @keyframes glitch-text {
+        0% { transform: skewX(0deg); text-shadow: 2px 2px red; }
+        20% { transform: skewX(-20deg); text-shadow: -5px -5px blue; }
+        40% { transform: skewX(20deg); text-shadow: 5px 5px green; }
+        60% { transform: skewX(0deg); text-shadow: 2px 2px red; }
+      }
+      body { animation: body-shake 0.1s infinite; background-color: black !important; }
+      @keyframes body-shake {
+        0%, 100% { transform: translate(0, 0); }
+        50% { transform: translate(5px, 5px); }
+      }
     `;
     document.head.appendChild(styleGlitch);
 
-    const hackText = document.getElementById("hack-matrix");
-    const charList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*!<>{}[]";
+    const hackText = document.getElementById("creepy-spam");
+    const mots = ["MORT ", "SANG ", "DERRIÈRE TOI ", "REGARDE ", "FUI ", "TROP TARD ", "666 ", "SOUFFRE ", "IL TE VOIT ", "CRÈVE "];
     
     setInterval(() => {
-      let noise = "";
-      for (let i = 0; i < 50; i++) {
-        noise += charList.charAt(Math.floor(Math.random() * charList.length));
+      let batch = "";
+      for (let i = 0; i < 40; i++) batch += mots[Math.floor(Math.random() * mots.length)];
+      hackText.textContent = batch + hackText.textContent;
+      if (hackText.textContent.length > 2000) {
+        hackText.textContent = hackText.textContent.substring(0, 2000);
       }
-      hackText.textContent = noise + "\\n" + hackText.textContent;
-      if (hackText.textContent.length > 3000) {
-        hackText.textContent = hackText.textContent.substring(0, 3000);
-      }
-    }, 30);
+    }, 40);
   };
 });
