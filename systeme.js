@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const boutonSon = document.getElementById("sound-btn");
   const barreRaccourcis = document.getElementById("shortcuts-bar");
 
-  let enigmeActuelle = -1; // -1 = Phase de démarrage
+  let enigmeActuelle = -1;
   let estSeul = true;
   let estEnTrainDEcrire = false;
   let compteurIndices = 0;
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const texteFormate = String(mins).padStart(2, '0') + ":" + String(secs).padStart(2, '0');
     compteurHud.textContent = texteFormate;
 
-    if (totalSecondes <= 240) { // Urgence (moins de 4 min)
+    if (totalSecondes <= 240) {
       compteurHud.classList.add("urgent");
       if (totalSecondes % 30 === 0 && window.audioTerminal) {
         window.audioTerminal.jouerAlarmeDharma();
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (totalSecondes > 0) {
       totalSecondes--;
     } else {
-      totalSecondes = 108 * 60; // Reboot
+      totalSecondes = 108 * 60;
       if (window.audioTerminal) window.audioTerminal.jouerAlarmeDharma();
     }
   };
@@ -98,11 +98,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const focaliserEntree = () => {
     if (entreeCachee && !estEnTrainDEcrire) {
-      entreeCachee.focus();
+      // PREVENT SCROLL : corrige le bug de la page qui saute vers le haut ou le bas !
+      entreeCachee.focus({ preventScroll: true });
     }
   };
 
   document.addEventListener("click", focaliserEntree);
+
+  const defilerVersLeBas = () => {
+    // Fait défiler le conteneur principal au lieu du body pour éviter les sauts
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  };
 
   const ecrireTexte = async (texte, classeSupplementaire = "", vitesse = 18) => {
     estEnTrainDEcrire = true;
@@ -121,13 +130,17 @@ document.addEventListener("DOMContentLoaded", () => {
       let delai = vitesse + Math.random() * 15;
       if (texte[i] === '.' || texte[i] === '!' || texte[i] === '?') delai += 120;
       if (texte[i] === '\n') delai += 150;
+      
+      // Auto-scroll léger pendant l'écriture
+      if (i % 20 === 0) window.scrollTo(0, document.body.scrollHeight);
+      
       await new Promise(r => setTimeout(r, delai));
     }
 
     estEnTrainDEcrire = false;
     ligneSaisie.classList.remove("hidden");
     focaliserEntree();
-    window.scrollTo(0, document.body.scrollHeight);
+    defilerVersLeBas();
     return ligne;
   };
 
@@ -136,19 +149,19 @@ document.addEventListener("DOMContentLoaded", () => {
     ligne.className = "line " + classeSupplementaire;
     ligne.textContent = texte;
     sortie.appendChild(ligne);
-    window.scrollTo(0, document.body.scrollHeight);
+    defilerVersLeBas();
     return ligne;
   };
 
   const demarrerSequence = async () => {
     await new Promise(r => setTimeout(r, 800));
-    await ecrireTexte("> BOOT DU SETUP DE STREAM...", "system");
+    await ecrireTexte("> ALLUMAGE DU PC...", "system");
     await new Promise(r => setTimeout(r, 400));
-    await ecrireTexte("> CONNEXION AU SERVEUR TWITCH D'ANIMATO... CONNECTÉ.", "system");
+    await ecrireTexte("> CONNEXION AU LIVE D'ANIMATO... C'EST BON.", "system");
     await new Promise(r => setTimeout(r, 600));
-    await ecrireTexte("> LOCALISATION : LE MANOIR DE L'HORREUR.", "system");
+    await ecrireTexte("> LOCALISATION : LE MANOIR.", "system");
     await new Promise(r => setTimeout(r, 800));
-    await ecrireTexte("> ALERTE TCHAT : INVASION DE BACKSEATERS ET DE VIEWERS FANTÔMES.", "alert");
+    await ecrireTexte("> ALERTE TCHAT : INVASION DE BACKSEATERS ET DE FANTÔMES.", "alert");
     await new Promise(r => setTimeout(r, 1200));
 
     afficherDirectement(`
@@ -160,7 +173,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `, "ascii");
 
     await ecrireTexte(" ");
-    await ecrireTexte("Es-tu un Modérateur (VIP) prêt à purifier le tchat d'Animato ?", "question");
+    await ecrireTexte("T'es un Modo chaud pour purifier le tchat ce soir ?", "question");
   };
 
   const poserEnigmeActuelle = async () => {
@@ -184,16 +197,16 @@ document.addEventListener("DOMContentLoaded", () => {
     if (enigme.audioMorse) {
       const conteneurSon = document.createElement("div");
       conteneurSon.className = "line morse-cue";
-      conteneurSon.innerHTML = "<span>🔊 Sub alert (Morse) détectée : <strong>" + enigme.audioMorse + "</strong></span><button class='morse-play-btn' id='play-morse-btn'>[ JOUER LE SIGNAL AUDIO ]</button>";
+      conteneurSon.innerHTML = "<span>🔊 Sub alert détectée : <strong>" + enigme.audioMorse + "</strong></span><button class='morse-play-btn' id='play-morse-btn'>[ JOUER LE SON ]</button>";
       sortie.appendChild(conteneurSon);
 
       const boutonPlay = document.getElementById("play-morse-btn");
       if (boutonPlay) {
         boutonPlay.addEventListener("click", () => {
           if (window.audioTerminal) {
-            boutonPlay.textContent = "SIGNAL EN COURS...";
+            boutonPlay.textContent = "EN COURS...";
             window.audioTerminal.jouerMorse(enigme.audioMorse, () => {
-              boutonPlay.textContent = "[ RÉÉCOUTER LE SIGNAL ]";
+              boutonPlay.textContent = "[ RÉÉCOUTER LE SON ]";
             });
           }
         });
@@ -214,20 +227,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     await ecrireTexte("================================================================", "system");
-    await ecrireTexte("GÉNIAAAAL ! LE LIVE EST SÉCURISÉ !", "success");
-    await ecrireTexte("LES VIEWERS FANTÔMES SONT REPARTIS DANS LEURS TOMBES.", "success");
-    await ecrireTexte("ANIMATO PEUT REPRENDRE SON JEU D'HORREUR TRANQUILLEMENT.", "success");
+    await ecrireTexte("C'EST BON, LE LIVE EST SAFE !", "success");
+    await ecrireTexte("LES FANTÔMES ONT DISPARU DU TCHAT.", "success");
+    await ecrireTexte("ANIMATO PEUT REPRENDRE SON JEU TRANQUILLE.", "success");
     await ecrireTexte("================================================================", "system");
     await new Promise(r => setTimeout(r, 1500));
 
     await ecrireTexte("Message privé d'Animato...", "system");
     await new Promise(r => setTimeout(r, 1200));
-    await ecrireTexte("'Merci le S. T'as géré la modération comme un chef ce soir.'", "story");
-    await ecrireTexte("'On se capte au prochain live. Namaste, et bonne nuit le tchat !'", "story");
+    await ecrireTexte("'Toucher ! Ah lala, bien vu le sang, t'as géré de fou ce soir.'", "story");
+    await ecrireTexte("'On se capte au prochain live. Namaste le tchat !'", "story");
     await new Promise(r => setTimeout(r, 2000));
 
     if (window.audioTerminal) window.audioTerminal.jouerErreurGlitch();
-    await ecrireTexte("> INTERCEPTION PAR LE BOT MODÉRATEUR : ANALYSE DU DERNIER VIEWER...", "alert");
+    await ecrireTexte("> INTERCEPTION DU BOT MODO : DERNIER VIEWER SUSPECT...", "alert");
     await new Promise(r => setTimeout(r, 1000));
 
     if (estSeul) {
@@ -237,28 +250,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const reponse = await fetch('https://ipapi.co/json/');
         const donnees = await reponse.json();
         if (donnees.ip) ip = donnees.ip;
-        // Fix string interpolation bug! Using concat instead of backticks.
         if (donnees.city) loc = donnees.city + ", " + donnees.region + " (" + donnees.country_name + ")";
       } catch (e) {}
 
-      let os = "PC DE GAMER HANTÉ";
+      let os = "PC GAMER";
       const ua = navigator.userAgent;
       if (ua.includes("Win")) os = "WINDOWS 11 (SETUP STREAMER)";
       else if (ua.includes("Mac")) os = "MACBOOK DE MODO";
       else if (ua.includes("Linux")) os = "LINUX (HACKER DU TCHAT)";
-      else if (ua.includes("Android") || ua.includes("iPhone")) os = "SMARTPHONE DANS LE LIT";
+      else if (ua.includes("Android") || ua.includes("iPhone")) os = "TÉLÉPHONE SOUS LA COUETTE";
 
-      await ecrireTexte("> ADRESSE IP DU MODO IDENTIFIÉE : " + ip, "alert");
+      await ecrireTexte("> IP DU MODO IDENTIFIÉE : " + ip, "alert");
       await new Promise(r => setTimeout(r, 600));
       await ecrireTexte("> SETUP : " + os, "alert");
       await new Promise(r => setTimeout(r, 600));
-      await ecrireTexte("> LOCALISATION GÉOGRAPHIQUE : " + loc, "alert");
+      await ecrireTexte("> LOCALISATION : " + loc, "alert");
       await new Promise(r => setTimeout(r, 600));
-      await ecrireTexte("> TEMPÉRATURE DU CPU : 99°C (PRÉSENCE SURNATURELLE)", "alert");
+      await ecrireTexte("> TEMPÉRATURE CPU : 99°C (ÇA CHAUFFE LÀ)", "alert");
     } else {
-      await ecrireTexte("> ADRESSE IP : [ CACHÉE PAR LE VPN DU MANOIR ]", "alert-glitch");
+      await ecrireTexte("> IP : [ CACHÉE PAR LE VPN ]", "alert-glitch");
       await new Promise(r => setTimeout(r, 600));
-      await ecrireTexte("> SYSTÈME : [ CONFINÉ DANS LE TCHAT SUB-ONLY ]", "alert-glitch");
+      await ecrireTexte("> SYSTÈME : [ MODE SUB-ONLY ]", "alert-glitch");
     }
 
     await new Promise(r => setTimeout(r, 1500));
@@ -268,20 +280,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     afficherDirectement(`
        .-.
-      (o.o)   MERCI D'AVOIR MODÉRÉ LE LIVE D'ANIMATO !
-       |=|    Les jumpscares ont été esquivés avec succès.
-      __|__   Tapez 'reset' pour relancer le prochain live.
+      (o.o)   GG ! T'AS SAUVÉ LE LIVE D'ANIMATO !
+       |=|    Les jumpscares sont passés crème.
+      __|__   Tape 'reset' pour relancer le stream.
     `, "ascii");
 
-    await ecrireTexte("[ VOD SECRÈTE DÉVERROUILLÉE : BEST_OF_SCREAMERS.mp4 ]", "system");
+    await ecrireTexte("[ VOD SECRÈTE DÉBLOQUÉE : BEST_OF_SCREAMERS.mp4 ]", "system");
     await new Promise(r => setTimeout(r, 1500));
 
     const divVideo = document.createElement("div");
     divVideo.style.margin = "20px 0";
-    divVideo.innerHTML = "<p style='margin-bottom: 12px; color: var(--bright-green);'>Clique ci-dessous pour visionner l'archive du stream :</p><a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank' style='color: #000; background: var(--bright-green); padding: 10px 18px; text-decoration: none; font-weight: bold; display: inline-block;'>[ VISIONNER LA VOD DU MANOIR ]</a>";
+    divVideo.innerHTML = "<p style='margin-bottom: 12px; color: var(--bright-green);'>Clique juste en dessous pour voir le replay :</p><a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ' target='_blank' style='color: #000; background: var(--bright-green); padding: 10px 18px; text-decoration: none; font-weight: bold; display: inline-block;'>[ MATER LA VOD ]</a>";
     sortie.appendChild(divVideo);
     ligneSaisie.classList.remove("hidden");
     focaliserEntree();
+    defilerVersLeBas();
   };
 
   const normaliser = (chaine) => {
@@ -324,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
   * manoir / carte  : Affiche le plan du Manoir d'Horreur.
   * compteur / timer: Affiche le temps restant sur le live (108:00).
   * statut / status : Affiche ta progression de modération.
-  * son / audio     : Coupe ou réactive les alertes sonores du stream.
+  * son / audio     : Coupe ou réactive le son du terminal.
   * clear / cls     : Efface le tchat de ton écran.
   * reset           : Relance le stream à zéro.
 =====================================================================
@@ -346,7 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
   F : Foxtrot      M : Mike         T : Tango
   G : Golf         N : November     U : Uniform
 =====================================================================
-Astuce : La première lettre de chaque mot forme le message caché !
+Astuce : La première lettre de chaque mot te donne la solution !
       `, "table");
       ligneSaisie.classList.remove("hidden");
       focaliserEntree();
@@ -374,10 +387,10 @@ Astuce : La première lettre de chaque mot forme le message caché !
       if (enigmeActuelle >= 0 && enigmeActuelle < window.ENIGMES.length) {
         const enigme = window.ENIGMES[enigmeActuelle];
         if (enigme.audioMorse && window.audioTerminal) {
-          await ecrireTexte("> ÉMISSION DU SIGNAL DE SUB-ALERT : " + enigme.audioMorse, "system");
+          await ecrireTexte("> ON ENVOIE LA SUB-ALERT : " + enigme.audioMorse, "system");
           window.audioTerminal.jouerMorse(enigme.audioMorse);
         } else {
-          await ecrireTexte("> Aucun son de don ou de sub pour l'instant.", "system");
+          await ecrireTexte("> Pas de son prévu pour cette étape.", "system");
         }
       }
       ligneSaisie.classList.remove("hidden");
@@ -391,12 +404,12 @@ Astuce : La première lettre de chaque mot forme le message caché !
         if (enigme.indices && enigme.indices.length > 0) {
           const indice = enigme.indices[compteurIndices % enigme.indices.length];
           compteurIndices++;
-          await ecrireTexte("💡 INDICE DU TCHAT : " + indice, "hint");
+          await ecrireTexte("💡 LE TCHAT DIT : " + indice, "hint");
         } else {
-          await ecrireTexte("Le tchat spamme des émotes, pas d'indice possible.", "system");
+          await ecrireTexte("Le tchat spamme des émotes, ils savent pas non plus.", "system");
         }
       } else {
-        await ecrireTexte("Réponds d'abord à la question !", "system");
+        await ecrireTexte("Réponds d'abord à la question frérot !", "system");
       }
       ligneSaisie.classList.remove("hidden");
       focaliserEntree();
@@ -419,10 +432,10 @@ Astuce : La première lettre de chaque mot forme le message caché !
           [ INITIATIVE DHARMA - SECTION ANIMATO ]
           STATION DU STREAM // GESTION DES RATS
   
-  Créée par Animato le VTuber pour ses lives d'Horreur.
-  Objectif : Contenir les viewers fous et les fantômes
-  qui popent sur l'écran pendant les jeux d'horreur.
-  Mots d'ordre : Pas de backseat, respectez les modos ! 'Namaste'.
+  Mise en place par Animato pour ses streams d'horreur.
+  But : Gérer les viewers intenables et ban les fantômes
+  qui popent sur l'écran. 
+  Règle n°1 : Pas de backseat. 'Namaste'.
       `, "ascii");
       ligneSaisie.classList.remove("hidden");
       focaliserEntree();
@@ -432,9 +445,9 @@ Astuce : La première lettre de chaque mot forme le message caché !
     if (norm === "manoir" || norm === "carte" || norm === "map") {
       afficherDirectement(`
 =================== CARTE DU MANOIR ANIMATO ===================
-  [ÉTAGE 2] : La chambre de modération, Les combles d'horreur
+  [ÉTAGE 2] : La salle des modos, Les combles flippants
   [ÉTAGE 1] : Bibliothèque du Tchat, Balcon des Viewers
-  [REZ-DE-CH] : Grand Vestibule, Le Setup PC de Stream
+  [REZ-DE-CH] : Le Setup PC du Stream
   [SOUS-SOL] : Cave des Sub-goals, Serveurs Twitch DHARMA
 ===============================================================
       `, "table");
@@ -446,7 +459,7 @@ Astuce : La première lettre de chaque mot forme le message caché !
     if (norm === "compteur" || norm === "timer") {
       const mins = Math.floor(totalSecondes / 60);
       const secs = totalSecondes % 60;
-      await ecrireTexte("> CHRONO DU STREAM : " + mins + "m " + secs + "s restantes.", "system");
+      await ecrireTexte("> CHRONO : Encore " + mins + "m " + secs + "s de live.", "system");
       ligneSaisie.classList.remove("hidden");
       focaliserEntree();
       return;
@@ -479,7 +492,7 @@ Astuce : La première lettre de chaque mot forme le message caché !
           boutonSon.textContent = actif ? "SON : ON" : "SON : MUTE";
           boutonSon.style.color = actif ? "var(--green)" : "#ff4444";
         }
-        await ecrireTexte("> Volume du stream : " + (actif ? "ALLUMÉ" : "COUPÉ"), "system");
+        await ecrireTexte("> Son du terminal : " + (actif ? "ALLUMÉ" : "COUPÉ"), "system");
       }
       ligneSaisie.classList.remove("hidden");
       focaliserEntree();
@@ -490,7 +503,7 @@ Astuce : La première lettre de chaque mot forme le message caché !
       sortie.innerHTML = "";
       enigmeActuelle = 0;
       totalSecondes = 108 * 60;
-      await ecrireTexte("> REBOOT DU LIVE ET DES MODOS...", "alert");
+      await ecrireTexte("> REBOOT DU LIVE, ON RECOMMENCE TOUT...", "alert");
       await new Promise(r => setTimeout(r, 1000));
       poserEnigmeActuelle();
       return;
@@ -498,15 +511,7 @@ Astuce : La première lettre de chaque mot forme le message caché !
 
     if (norm === "4 8 15 16 23 42" && enigmeActuelle !== 0) {
       if (window.audioTerminal) window.audioTerminal.jouerSonVictoire();
-      await ecrireTexte("> LE CODE DE LOST EST VALIDÉ PAR LE MODÉRATEUR...", "success");
-      ligneSaisie.classList.remove("hidden");
-      focaliserEntree();
-      return;
-    }
-
-    if (norm === "matrix") {
-      await ecrireTexte("> PLUIE DE BITS SUR LE STREAM...", "system");
-      afficherDirectement("01100100 01101000 01100001 01110010 01101101 01100001", "echo");
+      await ecrireTexte("> LE CODE DE LOST EST VALIDÉ, BIEN VU...", "success");
       ligneSaisie.classList.remove("hidden");
       focaliserEntree();
       return;
@@ -515,11 +520,11 @@ Astuce : La première lettre de chaque mot forme le message caché !
     if (enigmeActuelle === -1) {
       if (norm === "non" || norm === "no") {
         estSeul = false;
-        await ecrireTexte("Sage décision de modérer à plusieurs.", "system");
+        await ecrireTexte("C'est mieux d'être plusieurs modos de toute façon.", "system");
       } else if (norm === "oui" || norm === "yes") {
         estSeul = true;
         if (window.audioTerminal) window.audioTerminal.jouerMurmureFantome();
-        await ecrireTexte("Parfait. Tu es le seul MODO actif ce soir.", "alert");
+        await ecrireTexte("Courage alors, t'es tout seul pour gérer le tchat.", "alert");
       } else {
         if (window.audioTerminal) window.audioTerminal.jouerErreurGlitch();
         await ecrireTexte("Réponds par OUI ou par NON le sang.");
@@ -529,7 +534,7 @@ Astuce : La première lettre de chaque mot forme le message caché !
       }
 
       await new Promise(r => setTimeout(r, 1000));
-      await ecrireTexte("Lancement de la Station Animato...", "system");
+      await ecrireTexte("Lancement de la station Animato...", "system");
       await new Promise(r => setTimeout(r, 1000));
       enigmeActuelle = 0;
       poserEnigmeActuelle();
@@ -553,16 +558,16 @@ Astuce : La première lettre de chaque mot forme le message caché !
     if (estCorrect) {
       if (window.audioTerminal) window.audioTerminal.jouerSonVictoire();
       await new Promise(r => setTimeout(r, 400));
-      await ecrireTexte(enigme.messageVictoire || "> Exact. Viewers maîtrisés.", "success");
+      await ecrireTexte(enigme.messageVictoire || "> Carré. T'as géré ça facile.", "success");
       await new Promise(r => setTimeout(r, 1200));
       enigmeActuelle++;
       poserEnigmeActuelle();
     } else {
       if (window.audioTerminal) window.audioTerminal.jouerErreurGlitch();
       await new Promise(r => setTimeout(r, 300));
-      await ecrireTexte("Faux. Le tchat te spamme d'émotes Clown.", "alert");
+      await ecrireTexte("Aïe, c'est pas ça. Le tchat se fout de toi.", "alert");
       await new Promise(r => setTimeout(r, 600));
-      await ecrireTexte("(Astuce : tapez 'indice' pour un coup de pouce, ou 'otan' / 'morse')", "system");
+      await ecrireTexte("(Astuce : tape 'indice' si t'es bloqué, ou utilise 'otan' / 'morse')", "system");
       ligneSaisie.classList.remove("hidden");
       focaliserEntree();
     }
