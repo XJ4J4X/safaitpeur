@@ -1,4 +1,5 @@
 // Advanced Web Audio API procedural sound engine for retro CRT terminal
+// Theme: DHARMA Initiative x Haunted Manor & Halloween
 class TerminalAudio {
   constructor() {
     this.ctx = null;
@@ -77,7 +78,6 @@ class TerminalAudio {
 
     const t = this.ctx.currentTime;
 
-    // High voltage CRT 15.6 kHz flyback squeal dropping into steady hum
     const flyback = this.ctx.createOscillator();
     const flybackGain = this.ctx.createGain();
     flyback.type = "sine";
@@ -93,7 +93,6 @@ class TerminalAudio {
     flyback.start(t);
     flyback.stop(t + 0.85);
 
-    // Low voltage surge hum
     const hum = this.ctx.createOscillator();
     const humGain = this.ctx.createGain();
     hum.type = "sawtooth";
@@ -125,13 +124,13 @@ class TerminalAudio {
     const gain = this.ctx.createGain();
 
     osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(55, t); // European mains hum
+    osc.frequency.setValueAtTime(55, t);
 
     filter.type = "lowpass";
     filter.frequency.setValueAtTime(160, t);
 
     gain.gain.setValueAtTime(0.001, t);
-    gain.gain.linearRampToValueAtTime(0.015, t + 2); // Very quiet in the background
+    gain.gain.linearRampToValueAtTime(0.015, t + 2);
 
     osc.connect(filter);
     filter.connect(gain);
@@ -159,7 +158,7 @@ class TerminalAudio {
     }
   }
 
-  // 4. Mechanical Keyboard Keystroke (multi-layered click + spring thud)
+  // 4. Mechanical Keyboard Keystroke
   playKeyClick(isSpace = false) {
     if (!this.enabled) return;
     this.init();
@@ -167,7 +166,6 @@ class TerminalAudio {
 
     const t = this.ctx.currentTime;
 
-    // Layer 1: High click snap
     const click = this.ctx.createOscillator();
     const clickGain = this.ctx.createGain();
     click.type = "triangle";
@@ -184,7 +182,6 @@ class TerminalAudio {
     click.start(t);
     click.stop(t + 0.025);
 
-    // Layer 2: Mechanical spring / casing thud
     const thud = this.ctx.createOscillator();
     const thudGain = this.ctx.createGain();
     thud.type = "sine";
@@ -200,7 +197,7 @@ class TerminalAudio {
     thud.stop(t + 0.04);
   }
 
-  // 5. High-tech teletype data stream chirp (for text decryption)
+  // 5. High-tech teletype data stream chirp
   playDataChirp() {
     if (!this.enabled) return;
     this.init();
@@ -247,7 +244,7 @@ class TerminalAudio {
     osc.stop(t + 0.08);
   }
 
-  // 7. Dramatic Error Glitch: Low Sub Bass drop + Buzzer + Static Noise Burst
+  // 7. Dramatic Error Glitch
   playErrorGlitch() {
     if (!this.enabled) return;
     this.init();
@@ -255,7 +252,6 @@ class TerminalAudio {
 
     const t = this.ctx.currentTime;
 
-    // Sub-bass drop (impact)
     const sub = this.ctx.createOscillator();
     const subGain = this.ctx.createGain();
     sub.type = "sawtooth";
@@ -270,7 +266,6 @@ class TerminalAudio {
     sub.start(t);
     sub.stop(t + 0.35);
 
-    // Harsh electronic buzzer
     const buzz = this.ctx.createOscillator();
     const buzzGain = this.ctx.createGain();
     buzz.type = "sawtooth";
@@ -285,7 +280,6 @@ class TerminalAudio {
     buzz.start(t);
     buzz.stop(t + 0.3);
 
-    // Static noise burst
     try {
       const bufferSize = this.ctx.sampleRate * 0.18;
       const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
@@ -315,14 +309,13 @@ class TerminalAudio {
     } catch (e) {}
   }
 
-  // 8. Glorious Victory / Unlock Chime (Eerie futuristic chord arpeggio)
+  // 8. Glorious Victory / Unlock Chime
   playSuccessArp() {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
 
     const t = this.ctx.currentTime;
-    // Harmonic series with Gotham mystery tone: D4 -> F#4 -> A4 -> D5 -> E5
     const notes = [293.66, 369.99, 440.00, 587.33, 659.25, 880.00];
 
     notes.forEach((freq, idx) => {
@@ -344,11 +337,10 @@ class TerminalAudio {
       osc.stop(noteTime + 0.5);
     });
 
-    // Sub-bass resonance swell
     const sub = this.ctx.createOscillator();
     const subGain = this.ctx.createGain();
     sub.type = "sine";
-    sub.frequency.setValueAtTime(73.42, t); // D2
+    sub.frequency.setValueAtTime(73.42, t);
     sub.frequency.linearRampToValueAtTime(146.83, t + 0.5);
 
     subGain.gain.setValueAtTime(0.001, t);
@@ -361,14 +353,13 @@ class TerminalAudio {
     sub.stop(t + 0.7);
   }
 
-  // 9. Evil Digital Laugh for Splash Screen
+  // 9. Evil Digital Laugh
   playLaugh() {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
 
     const t = this.ctx.currentTime;
-    // Rapid descending sawtooth bursts (Ha Ha Ha)
     for (let i = 0; i < 7; i++) {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -376,7 +367,7 @@ class TerminalAudio {
       osc.frequency.setValueAtTime(180 - (i * 12), t + i * 0.15); 
       osc.frequency.exponentialRampToValueAtTime(60, t + i * 0.15 + 0.1);
       
-      gain.gain.setValueAtTime(0.3, t + i * 0.15);
+      gain.gain.setValueAtTime(0.25, t + i * 0.15);
       gain.gain.exponentialRampToValueAtTime(0.01, t + i * 0.15 + 0.1);
       
       osc.connect(gain); 
@@ -384,6 +375,180 @@ class TerminalAudio {
       osc.start(t + i * 0.15); 
       osc.stop(t + i * 0.15 + 0.1);
     }
+  }
+
+  // 10. REAL MORSE TELEGRAPH TONE GENERATOR (750 Hz CW Beeps)
+  playMorse(morseStr, onDone = null) {
+    if (!this.enabled) {
+      if (onDone) onDone();
+      return;
+    }
+    this.init();
+    if (!this.ctx) {
+      if (onDone) onDone();
+      return;
+    }
+
+    const dotDuration = 0.08; // 80ms standard dot
+    const dashDuration = dotDuration * 3; // 240ms dash
+    const intraCharPause = dotDuration;
+    const interCharPause = dotDuration * 3;
+    const interWordPause = dotDuration * 7;
+    const freq = 750;
+
+    let time = this.ctx.currentTime + 0.05;
+
+    // Split words by space or slash
+    const parts = morseStr.trim().split(/\s+/);
+    parts.forEach((symbolGroup) => {
+      for (let i = 0; i < symbolGroup.length; i++) {
+        const symbol = symbolGroup[i];
+        if (symbol === '.' || symbol === '-') {
+          const dur = symbol === '-' ? dashDuration : dotDuration;
+
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(freq, time);
+
+          // Smooth attack and release to avoid sharp pops
+          gain.gain.setValueAtTime(0.001, time);
+          gain.gain.linearRampToValueAtTime(0.12, time + 0.006);
+          gain.gain.setValueAtTime(0.12, time + dur - 0.006);
+          gain.gain.linearRampToValueAtTime(0.001, time + dur);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start(time);
+          osc.stop(time + dur + 0.01);
+
+          time += dur + intraCharPause;
+        } else if (symbol === '/') {
+          time += interWordPause;
+        }
+      }
+      time += interCharPause;
+    });
+
+    if (onDone) {
+      const waitMs = Math.max(100, (time - this.ctx.currentTime) * 1000);
+      setTimeout(onDone, waitMs);
+    }
+  }
+
+  // 11. LOST SWAN STATION HORN / ALARM (The 108 minute countdown klaxon)
+  playDharmaAlarm() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    // Iconic two-tone urgent klaxon blast: 440 Hz -> 587 Hz
+    const tones = [
+      { f: 440, dur: 0.28 },
+      { f: 587, dur: 0.35 }
+    ];
+
+    let toneTime = t;
+    tones.forEach((tone, idx) => {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(tone.f, toneTime);
+
+      gain.gain.setValueAtTime(0.001, toneTime);
+      gain.gain.linearRampToValueAtTime(0.2, toneTime + 0.02);
+      gain.gain.setValueAtTime(0.2, toneTime + tone.dur - 0.03);
+      gain.gain.linearRampToValueAtTime(0.001, toneTime + tone.dur);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(toneTime);
+      osc.stop(toneTime + tone.dur + 0.02);
+
+      toneTime += tone.dur + 0.05;
+    });
+  }
+
+  // 12. Eerie Ghost Whisper / Spectral Ectoplasm sweep
+  playGhostWhisper() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    const lfo = this.ctx.createOscillator();
+    const lfoGain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+    const gain = this.ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(320, t);
+    osc.frequency.linearRampToValueAtTime(540, t + 0.8);
+    osc.frequency.exponentialRampToValueAtTime(260, t + 1.8);
+
+    // Eerie tremolo / ghostly vibrato
+    lfo.type = "sine";
+    lfo.frequency.setValueAtTime(5.5, t);
+    lfoGain.gain.setValueAtTime(40, t);
+    lfo.connect(osc.frequency);
+
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(450, t);
+    filter.Q.setValueAtTime(3, t);
+
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.08, t + 0.5);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 1.8);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.ctx.destination);
+
+    lfo.start(t);
+    osc.start(t);
+    lfo.stop(t + 1.85);
+    osc.stop(t + 1.85);
+  }
+
+  // 13. Deep Thunder Rumble over Haunted Manor
+  playThunder() {
+    if (!this.enabled) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const t = this.ctx.currentTime;
+    try {
+      const bufferSize = this.ctx.sampleRate * 1.5;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (this.ctx.sampleRate * 0.5));
+      }
+
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(140, t);
+      filter.frequency.exponentialRampToValueAtTime(50, t + 1.4);
+
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 1.5);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      noise.start(t);
+      noise.stop(t + 1.5);
+    } catch (e) {}
   }
 }
 

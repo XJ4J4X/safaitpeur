@@ -1,62 +1,135 @@
 /* 
-  J4X OS - Stylesheet
-  Auteur: J4X
-  Note: Attention au z-index de l'iframe YouTube pour qu'il reste au premier plan.
+  DHARMA INITIATIVE // STATION 13 : LE SPECTRE (MANOIR BLACKWOOD)
+  Terminal Cathodique Vert CRT - Protocole Samhain
 */
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=VT323&display=swap');
 
 :root {
   --green: #20C20E;
-  --bg: #000000;
-  --font: 'Courier Prime', Courier, monospace;
+  --bright-green: #3bff2b;
+  --dark-green: #0a4005;
+  --faint-green: rgba(32, 194, 14, 0.15);
+  --glow-color: rgba(32, 194, 14, 0.75);
+  --alert-red: #ff2222;
+  --alert-glow: rgba(255, 34, 34, 0.8);
+  --bg: #030803;
+  --crt-bezel: #010401;
+  --font: 'Courier Prime', 'VT323', 'Courier New', Courier, monospace;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: var(--term-font) !important;
+  font-family: var(--font) !important;
 }
 
-body {
-  background-color: var(--bg);
-  /* Effet de grille discret */
-  background-image: 
-    linear-gradient(rgba(32, 194, 14, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(32, 194, 14, 0.03) 1px, transparent 1px);
-  background-size: 100% 4px, 4px 100%;
-  color: var(--green);
-  font-family: var(--font);
-  font-size: 26px;
-  line-height: 1.5;
-  overflow-x: hidden;
-  padding: 40px;
-  /* Effet vignette cinéma */
-  box-shadow: inset 0 0 150px rgba(0,0,0,0.9);
+html, body {
+  width: 100%;
   min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--green);
+  overflow-x: hidden;
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+/* CRT Cathodic Screen Simulation Wrapper */
+body {
+  position: relative;
+  background-color: var(--bg);
+  /* Trame cathodique et phosphore */
+  background-image: 
+    radial-gradient(ellipse at center, rgba(32, 194, 14, 0.08) 0%, rgba(3, 8, 3, 0.95) 85%),
+    linear-gradient(rgba(32, 194, 14, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(32, 194, 14, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 3px, 3px 100%;
+  padding: 24px;
+  box-shadow: inset 0 0 160px rgba(0, 0, 0, 0.95);
+  text-shadow: 0 0 5px var(--glow-color);
+}
+
+/* CRT Scanlines and Glass Glare Overlay */
+body::before {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+  z-index: 998;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Subtle CRT Flicker */
+body::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: rgba(18, 16, 16, 0.04);
+  opacity: 0;
+  z-index: 999;
+  pointer-events: none;
+  animation: crt-flicker 0.15s infinite;
+}
+
+@keyframes crt-flicker {
+  0% { opacity: 0.03; }
+  50% { opacity: 0.08; }
+  100% { opacity: 0.02; }
 }
 
 /* Écrans */
 .screen {
   display: none;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
+  position: relative;
+  z-index: 10;
 }
 
 .screen.active {
   display: block;
 }
 
-/* Accueil */
+/* Écran d'accueil / Boot */
+#boot-screen {
+  text-align: center;
+  margin-top: 10vh;
+}
+
+.boot-badge {
+  display: inline-block;
+  border: 2px solid var(--green);
+  padding: 14px 28px;
+  background: rgba(32, 194, 14, 0.05);
+  box-shadow: 0 0 20px var(--faint-green), inset 0 0 20px var(--faint-green);
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+
 .center-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 32px;
+  font-size: 26px;
   cursor: pointer;
   letter-spacing: 2px;
+  display: inline-block;
+  padding: 16px 32px;
+  border: 1px dashed var(--bright-green);
+  background: rgba(32, 194, 14, 0.08);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.center-text:hover {
+  background: var(--green);
+  color: #000;
+  box-shadow: 0 0 25px var(--bright-green);
+  text-shadow: none;
 }
 
 .blink {
@@ -67,66 +140,236 @@ body {
   50% { opacity: 0; }
 }
 
-/* Terminal Output */
-#gotham-header {
-  font-size: 20px;
-  opacity: 0.6;
-  margin-bottom: 40px;
-  line-height: 1.2;
+/* HUD DHARMA (Compteur 108 & Statut) */
+#dharma-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  border-bottom: 2px solid var(--dark-green);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  font-size: 16px;
+  letter-spacing: 1px;
 }
 
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(32, 194, 14, 0.05);
+  padding: 6px 12px;
+  border: 1px solid var(--dark-green);
+}
+
+.hud-timer {
+  color: var(--bright-green);
+  font-weight: bold;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+
+.hud-timer.urgent {
+  color: var(--alert-red) !important;
+  text-shadow: 0 0 10px var(--alert-glow);
+  animation: shake 0.3s infinite;
+}
+
+.sound-toggle-btn {
+  background: transparent;
+  color: var(--green);
+  border: 1px solid var(--green);
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.sound-toggle-btn:hover {
+  background: var(--green);
+  color: #000;
+}
+
+/* Terminal Header */
+#gotham-header {
+  font-size: 15px;
+  opacity: 0.9;
+  margin-bottom: 25px;
+  line-height: 1.25;
+  color: var(--green);
+  border: 1px solid var(--dark-green);
+  padding: 16px;
+  background: rgba(10, 30, 10, 0.3);
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8);
+}
+
+.ascii-logo {
+  font-family: monospace !important;
+  white-space: pre;
+  font-size: 12px;
+  line-height: 1.1;
+  color: var(--bright-green);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* Terminal Output */
 #output {
   white-space: pre-wrap;
   word-wrap: break-word;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   position: relative;
   z-index: 10;
 }
 
 .line {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   opacity: 0;
-  animation: fade-in 0.1s forwards;
-  text-shadow: none;
+  animation: fade-in 0.12s forwards;
+  line-height: 1.5;
 }
 
 .line.system {
-  color: #1a9e0b;
+  color: #1ea30c;
+  font-size: 18px;
 }
 
 .line.echo {
-  color: #39ff28;
+  color: var(--bright-green);
+  font-weight: bold;
+  background: rgba(32, 194, 14, 0.07);
+  padding: 4px 8px;
+  border-left: 3px solid var(--bright-green);
 }
 
-/* J'ai du enlever le gras ici sinon la police Courier devenait super moche */
+.line.stage {
+  color: #000;
+  background-color: var(--bright-green);
+  padding: 6px 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  display: inline-block;
+  margin: 20px 0 10px 0;
+  box-shadow: 0 0 15px var(--bright-green);
+  text-shadow: none;
+}
+
+.line.sector {
+  color: var(--green);
+  font-size: 16px;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+.line.story {
+  color: #a4fca0;
+  font-style: italic;
+  margin-bottom: 15px;
+  border-left: 2px solid var(--dark-green);
+  padding-left: 12px;
+}
+
 .line.question {
-  font-size: 28px;
-  margin: 40px 0;
+  font-size: 22px;
+  color: var(--bright-green);
+  margin: 20px 0;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  background: rgba(20, 60, 20, 0.35);
+  border: 1px solid var(--dark-green);
+  padding: 14px;
+}
+
+.line.hint {
+  color: #f7ca18;
+  text-shadow: 0 0 5px rgba(247, 202, 24, 0.6);
+  background: rgba(247, 202, 24, 0.08);
+  border-left: 3px solid #f7ca18;
+  padding: 8px 12px;
+}
+
+.line.success {
+  color: #4efc3a;
+  font-weight: bold;
+  background: rgba(32, 194, 14, 0.15);
+  border: 1px solid var(--bright-green);
+  padding: 10px 14px;
+  box-shadow: 0 0 15px var(--faint-green);
+}
+
+.line.ascii {
+  font-family: monospace !important;
+  white-space: pre;
+  font-size: 14px;
+  line-height: 1.15;
+  color: var(--bright-green);
+  margin: 15px 0;
+  overflow-x: auto;
+}
+
+.line.table {
+  font-family: monospace !important;
+  font-size: 15px;
+  background: rgba(10, 25, 10, 0.6);
+  border: 1px solid var(--dark-green);
+  padding: 12px;
+  margin: 12px 0;
+  line-height: 1.35;
+}
+
+.line.morse-cue {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(32, 194, 14, 0.1);
+  padding: 8px 12px;
+  margin: 10px 0;
+  border-left: 3px solid var(--green);
+}
+
+.morse-play-btn {
+  background: var(--dark-green);
+  color: var(--bright-green);
+  border: 1px solid var(--bright-green);
+  padding: 4px 10px;
+  font-size: 14px;
+  cursor: pointer;
   letter-spacing: 1px;
 }
 
-/* BOOM LE COUP DE FLIP */
+.morse-play-btn:hover {
+  background: var(--bright-green);
+  color: #000;
+  box-shadow: 0 0 10px var(--bright-green);
+}
+
+/* Alertes & Jump Scares */
 .line.alert {
-  color: #ff1111;
-  font-size: 26px;
+  color: var(--alert-red);
+  font-size: 22px;
   font-weight: bold;
+  text-shadow: 0 0 8px var(--alert-glow);
+  background: rgba(255, 34, 34, 0.1);
+  padding: 8px 12px;
+  border-left: 4px solid var(--alert-red);
 }
 
 .line.alert-massive {
-  color: #ff0000;
-  font-size: 38px;
+  color: var(--alert-red);
+  font-size: 32px;
   font-weight: bold;
   letter-spacing: 2px;
-  margin: 50px 0;
+  margin: 30px 0;
   text-align: center;
-  text-shadow: 0 0 10px #ff0000;
-  animation: shake 0.3s infinite;
+  text-shadow: 0 0 15px var(--alert-red);
+  animation: shake 0.25s infinite;
 }
 
-/* STYLES DES DONNÉES CENSURÉES */
 .line.alert-glitch {
   color: #ff3333;
-  font-size: 26px;
+  font-size: 22px;
   font-weight: bold;
   animation: data-glitch 0.15s infinite;
   text-shadow: 2px 0 cyan, -2px 0 magenta;
@@ -142,16 +385,16 @@ body {
 
 @keyframes shake {
   0%, 100% { transform: translate(0, 0); }
-  25% { transform: translate(-2px, 2px); }
-  50% { transform: translate(2px, -2px); }
-  75% { transform: translate(2px, 2px); }
+  25% { transform: translate(-3px, 2px); }
+  50% { transform: translate(3px, -2px); }
+  75% { transform: translate(-2px, -2px); }
 }
 
 @keyframes fade-in {
   to { opacity: 1; }
 }
 
-/* Input Area - à ne surtout pas toucher */
+/* Zone d'entrée de commande */
 .hidden {
   display: none !important;
 }
@@ -159,36 +402,99 @@ body {
 #input-line {
   display: flex;
   align-items: center;
-  color: #39ff28;
+  color: var(--bright-green);
   position: relative;
   z-index: 10;
+  font-size: 22px;
+  background: rgba(10, 30, 10, 0.4);
+  padding: 8px 12px;
+  border: 1px solid var(--dark-green);
 }
 
 .prompt {
-  margin-right: 10px;
+  margin-right: 12px;
+  font-weight: bold;
+  color: var(--bright-green);
+  user-select: none;
+}
+
+#input-display {
+  white-space: pre;
+  word-break: break-all;
 }
 
 .cursor {
   display: inline-block;
-  width: 16px;
-  height: 30px;
-  background-color: var(--green);
-  animation: blinker 1s step-end infinite;
+  width: 14px;
+  height: 24px;
+  background-color: var(--bright-green);
+  animation: blinker 0.9s step-end infinite;
   margin-left: 2px;
   vertical-align: text-bottom;
+  box-shadow: 0 0 8px var(--bright-green);
 }
 
-/* Responsive vite fait */
+/* Hidden input for mobile keyboard / seamless focus */
+#hidden-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: auto;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+}
+
+/* Footer & Command Helper Shortcuts */
+#shortcuts-bar {
+  margin-top: 30px;
+  padding-top: 15px;
+  border-top: 1px solid var(--dark-green);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+  opacity: 0.75;
+}
+
+.shortcut-chip {
+  background: rgba(32, 194, 14, 0.08);
+  border: 1px solid var(--dark-green);
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shortcut-chip:hover {
+  background: var(--dark-green);
+  color: var(--bright-green);
+  border-color: var(--bright-green);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   body {
-    font-size: 18px;
-    padding: 20px;
+    font-size: 16px;
+    padding: 12px;
+  }
+  #gotham-header {
+    font-size: 13px;
+    padding: 10px;
   }
   .line.question {
-    font-size: 22px;
+    font-size: 18px;
+  }
+  .line.alert-massive {
+    font-size: 24px;
+  }
+  #input-line {
+    font-size: 18px;
   }
   .cursor {
-    height: 22px;
-    width: 12px;
+    height: 18px;
+    width: 10px;
+  }
+  .ascii-logo {
+    font-size: 9px;
   }
 }
