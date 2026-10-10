@@ -625,7 +625,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     const styleGlitch = document.createElement("style");
-    styleGlitch.innerHTML = \`
+    styleGlitch.innerHTML = `
       @keyframes glitch {
         0% { transform: translate(0) }
         20% { transform: translate(-4px, 4px) }
@@ -639,7 +639,7 @@ document.addEventListener("DOMContentLoaded", () => {
         50% { opacity: 0; }
       }
       body { background-color: black !important; }
-    \`;
+    `;
     document.head.appendChild(styleGlitch);
 
     const hackText = document.getElementById("hack-matrix");
