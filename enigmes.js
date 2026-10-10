@@ -194,18 +194,20 @@ const ENIGMES = [
     id: 10,
     etape: "ÉTAPE 10 // FIN DE LIVE",
     secteur: "L'ÉCRAN DE FIN DE STREAM",
-    histoire: "Le live est sur le point de s'achever. Pour envoyer le raid final, le système demande une dernière confirmation : le mot fétiche du streamer.",
-    question: "CLÔTURE DU STREAM :\nQuel est ce mot célèbre qu'Aminato prononce tout le temps pendant ses streams ?",
+    histoire: "Le live est sur le point de s'achever. Aminato dit 'Toucher !' une dernière fois. Pour clôturer le stream, il faut lancer la horde de fantômes chez un autre streamer.",
+    question: "CLÔTURE DU STREAM :\nQuelle est cette action finale pour envoyer tous nos fantômes terrifier une autre chaîne Twitch ?",
     reponses: [
-      "toucher",
-      "touché",
-      "touché !"
+      "raid fantomatique",
+      "le raid fantomatique",
+      "raid",
+      "un raid",
+      "un raid fantomatique"
     ],
     indices: [
-      "C'est un mot de 7 lettres.",
-      "T - O - U - C - H - E - R"
+      "C'est une action classique sur Twitch à la fin d'un live (R...).",
+      "Raid... Fantomatique."
     ],
-    messageVictoire: "> Le mot de passe ultime est validé. Aminato crie : 'TOUCHER !' Le live est terminé."
+    messageVictoire: "> Le mot de passe ultime est validé. Raid fantomatique lancé avec succès. Le live est terminé."
   }
 ];
 
