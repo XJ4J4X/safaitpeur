@@ -1,7 +1,7 @@
-# 🎃 DHARMA INITIATIVE // STATION MANOIR ANIMATO
+# 🎃 DHARMA INITIATIVE // STATION MANOIR Aminato
 
 > **Terminal Cathodique Vert CRT & Jeu d'Énigmes Immersif**
-> Mixant l'univers mystérieux de **LOST (Initiative DHARMA)** et le thème d'**Halloween avec le VTuber Animato et ses viewers fantômes !**
+> Mixant l'univers mystérieux de **LOST (Initiative DHARMA)** et le thème d'**Halloween avec le VTuber Aminato et ses viewers fantômes !**
 
 Développé sur le moteur **J4X OS** (style écran vert cathodique rétro des années 70-80, inspiré du terminal de la station *Le Cygne* de Lost et de *Rata Alada*).
 
@@ -9,7 +9,7 @@ Développé sur le moteur **J4X OS** (style écran vert cathodique rétro des an
 
 ## 🧭 L'Histoire
 
-Dans les profondeurs du mystérieux **Manoir d'Animato**, le célèbre VTuber a installé sa **Station de Live (DHARMA Initiative)**. Mais la nuit d'Halloween, les serveurs entrent en résonance avec l'au-delà : le Tchat a percé le voile de la réalité et les **viewers se sont transformés en fantômes** !
+Dans les profondeurs du mystérieux **Manoir d'Aminato**, le célèbre VTuber a installé sa **Station de Live (DHARMA Initiative)**. Mais la nuit d'Halloween, les serveurs entrent en résonance avec l'au-delà : le Tchat a percé le voile de la réalité et les **viewers se sont transformés en fantômes** !
 
 Pour empêcher le crash du stream et la surcharge électromagnétique, les modérateurs doivent déverrouiller la console cathodique, décoder les transmissions des viewers en **Code OTAN** et en **Code Morse**, et saisir les protocoles sacrés de la fondation avant la fin du cycle de live de **108 minutes** !
 
@@ -27,7 +27,7 @@ Pour empêcher le crash du stream et la surcharge électromagnétique, les modé
 - 🧩 **10 Énigmes Progresses & Variées** :
   - **Code OTAN** (Alphabet phonétique aéronautique : *Sierra, Hotel, Alpha...*)
   - **Code Morse** (Signaux visuels et auditifs à décoder : *... --- ...*)
-  - **Lore DHARMA x Animato** (Suite des nombres `4 8 15 16 23 42`, cycle de `108` minutes, Station `Le Cygne`, formule `Namaste`).
+  - **Lore DHARMA x Aminato** (Suite des nombres `4 8 15 16 23 42`, cycle de `108` minutes, Station `Le Cygne`, formule `Namaste`).
   - **Thème Halloween & Manoir** (Viewers fantômes, Trolls Poltergeists, Jack O'Lantern).
 - 🛠️ **Boîte à outils dans le Terminal** : Commandes intégrées pour afficher les tables de décodage OTAN et Morse à tout moment !
 - 📱 **Compatible Mobile & Desktop** : Fonctionne parfaitement (et sans double frappe !) au clavier physique ainsi que sur smartphones.
@@ -59,7 +59,7 @@ Vous pouvez taper ces commandes à n'importe quel moment dans l'invite `>_ ` :
 | `otan` ou `nato` | Affiche la table complète de l'alphabet radio OTAN. |
 | `morse` | Affiche l'abécédaire du code Morse (. et -). |
 | `bip` ou `play` | Joue ou réécoute le signal audio Morse de l'énigme active. |
-| `dharma` ou `lost` | Affiche le logo ASCII et le manifeste de la Station du Manoir Animato. |
+| `dharma` ou `lost` | Affiche le logo ASCII et le manifeste de la Station du Manoir Aminato. |
 | `manoir` ou `carte` | Affiche le plan des ailes hantées du stream. |
 | `compteur` | Affiche le temps restant sur le live. |
 | `statut` | Affiche la sécurité et le pourcentage de confinement du Tchat. |
