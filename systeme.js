@@ -231,8 +231,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     await ecrireTexte("Message automatique d'Aminato...", "system");
     await new Promise(r => setTimeout(r, 1200));
-    await ecrireTexte("'Toucher ! Merci d'avoir géré le tchat ce soir.'", "story");
-    await ecrireTexte("'Fin du live. Namaste !'", "story");
+    await ecrireTexte("'Merci d'avoir géré le tchat ce soir.'", "story");
+    await ecrireTexte("'Fin du live. À la prochaine !'", "story");
     await new Promise(r => setTimeout(r, 2000));
 
     if (window.audioTerminal) window.audioTerminal.jouerErreurGlitch();

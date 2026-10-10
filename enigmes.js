@@ -27,7 +27,7 @@ const ENIGMES = [
     id: 1,
     etape: "ÉTAPE 01 // ACCÈS MODÉRATEUR DHARMA",
     secteur: "SOUS-SOLS DU MANOIR - SETUP DE STREAM",
-    histoire: "Le stream a crashé. Aminato a eu peur et a crié 'Toucher !'. Il faut relancer OBS avec le code DHARMA.",
+    histoire: "Le stream a crashé. Aminato a eu peur lors d'un jumpscare. Il faut relancer OBS avec le code DHARMA.",
     question: "CLÉ DE STREAM DHARMA :\nTapez la suite de 6 nombres (avec des espaces) pour relancer OBS.",
     reponses: [
       "4 8 15 16 23 42",
@@ -45,7 +45,7 @@ const ENIGMES = [
     id: 2,
     etape: "ÉTAPE 02 // CODE OTAN - L'INFECTION DU TCHAT",
     secteur: "LE TCHAT TWITCH",
-    histoire: "Le live a repris, mais un viewer spoile le jeu. Aminato lâche un 'Toucher !' d'épuisement.",
+    histoire: "Le live a repris, mais un viewer spoile le jeu en permanence.",
     question: "DÉTECTION (CODE OTAN) :\nQuel est ce comportement signalé par le bot ?\n>> BRAVO - ALPHA - CHARLIE - KILO - SIERRA - ECHO - ALPHA - TANGO <<",
     reponses: [
       "backseat",
@@ -75,7 +75,7 @@ const ENIGMES = [
       "Décodage : ... (S) / -.-. (C) / .-. (R) / . (E) / .- (A) / -- (M) / . (E) / .-. (R)",
       "Une image effrayante qui apparaît soudainement."
     ],
-    messageVictoire: "> Alerte décodée : SCREAMER. Aminato a eu très peur, 'Toucher !'."
+    messageVictoire: "> Alerte décodée : SCREAMER. Aminato a sursauté."
   },
   {
     id: 4,
@@ -97,7 +97,7 @@ const ENIGMES = [
     id: 5,
     etape: "ÉTAPE 05 // CODE OTAN - L'ENTITÉ EN JEU",
     secteur: "LA PARTIE EN COURS",
-    histoire: "Aminato lance le jeu. Des objets volent dans la pièce. 'Toucher !' dit-il en voyant les objets tomber.",
+    histoire: "Aminato explore la maison du jeu. Des objets volent dans toutes les directions.",
     question: "IDENTIFICATION DE L'ENTITÉ (CODE OTAN) :\nLe jeu indique ce fantôme :\n>> PAPA - OSCAR - LIMA - TANGO - ECHO - ROMEO - GOLF - ECHO - INDIA - SIERRA - TANGO <<\nQuelle est cette entité ?",
     reponses: [
       "poltergeist",
@@ -115,7 +115,7 @@ const ENIGMES = [
     id: 6,
     etape: "ÉTAPE 06 // CODE MORSE - LE DÉFENSEUR DU TCHAT",
     secteur: "LES LOGS DU TCHAT",
-    histoire: "Le tchat est envahi de messages. Une seule personne peut nettoyer tout ça.",
+    histoire: "Le tchat est envahi de messages indésirables. Une seule personne peut nettoyer tout ça.",
     question: "LE RÔLE (CODE MORSE) :\nSignal intercepté :\n--  /  ---  /  -..  /  ---\nQuel est votre rôle sur le tchat ?\n(Astuce : tapez 'bip' pour écouter)",
     audioMorse: "-- --- -.. ---",
     reponses: [
@@ -155,7 +155,7 @@ const ENIGMES = [
     id: 8,
     etape: "ÉTAPE 08 // LE JEU D'HORREUR DU MOIS",
     secteur: "LA BIBLIOTHÈQUE STEAM",
-    histoire: "Quel est ce jeu de fantômes auquel Aminato joue ?",
+    histoire: "Le stream d'horreur continue.",
     question: "CULTURE GAMING :\nQuel est ce célèbre jeu de coopération où l'on utilise un EMF et une Spirit Box ?",
     reponses: [
       "phasmophobia",
@@ -172,7 +172,7 @@ const ENIGMES = [
     id: 9,
     etape: "ÉTAPE 09 // LA SANCTION (OTAN + MORSE)",
     secteur: "LE BANNISSEMENT",
-    histoire: "Le pire troll du tchat est là. Il faut le bannir définitivement.",
+    histoire: "Le pire troll du tchat est identifié. Il faut le bannir définitivement.",
     question: "COMMANDE DOUBLE (OTAN + MORSE) :\nPartie A (OTAN) : BRAVO - ALPHA - NOVEMBER\nPartie B (Morse) : .-.  /  ..  /  .--.\nCombinez les deux mots (ex: 'BAN RIP') pour le bannir :",
     audioMorse: ".-. .. .--.",
     reponses: [
@@ -194,19 +194,18 @@ const ENIGMES = [
     id: 10,
     etape: "ÉTAPE 10 // FIN DE LIVE",
     secteur: "L'ÉCRAN DE FIN DE STREAM",
-    histoire: "Le live est fini. Aminato dit 'Toucher !' une dernière fois. Il va envoyer un raid et dire au revoir.",
-    question: "CLÔTURE DU STREAM :\nQuel est ce mot de 7 lettres (commençant par N) utilisé par la DHARMA Initiative pour dire au revoir de manière apaisée ?",
+    histoire: "Le live est sur le point de s'achever. Pour envoyer le raid final, le système demande une dernière confirmation : le mot fétiche du streamer.",
+    question: "CLÔTURE DU STREAM :\nQuel est ce mot célèbre qu'Aminato prononce tout le temps pendant ses streams ?",
     reponses: [
-      "namaste",
-      "namasté",
-      "raid",
-      "fin du live"
+      "toucher",
+      "touché",
+      "touché !"
     ],
     indices: [
-      "C'est un mot de salutation indien.",
-      "N - A - M - A - S - T - E"
+      "C'est un mot de 7 lettres.",
+      "T - O - U - C - H - E - R"
     ],
-    messageVictoire: "> Le live est terminé. Raid lancé avec succès."
+    messageVictoire: "> Le mot de passe ultime est validé. Aminato crie : 'TOUCHER !' Le live est terminé."
   }
 ];
 
