@@ -592,4 +592,68 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // --- EASTER EGG : KONAMI CODE (HACK / CRASH) ---
+  const sequenceKonami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+  let indexKonami = 0;
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === sequenceKonami[indexKonami]) {
+      indexKonami++;
+      if (indexKonami === sequenceKonami.length) {
+        declencherHackSysteme();
+        indexKonami = 0;
+      }
+    } else {
+      indexKonami = 0;
+      if (e.key === sequenceKonami[0]) indexKonami = 1;
+    }
+  });
+
+  const declencherHackSysteme = () => {
+    if (window.audioTerminal) {
+      window.audioTerminal.jouerErreurGlitch();
+      window.audioTerminal.jouerAlarmeDharma();
+    }
+    
+    document.body.innerHTML = `
+      <div style="position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:#050000;color:red;font-family:monospace;font-size:16px;padding:20px;box-sizing:border-box;z-index:99999;overflow:hidden;">
+        <h1 style="text-align:center;font-size:clamp(30px, 8vw, 80px);margin-top:20vh;animation:glitch 0.1s infinite, text-shadow-glitch 2s infinite;">FATAL SYSTEM OVERRIDE</h1>
+        <p style="text-align:center;font-size:24px;color:#ff4444;animation:blink 0.5s infinite;">BREACH DETECTED - STATION COMPROMISED</p>
+        <div id="hack-matrix" style="word-break:break-all;opacity:0.8;margin-top:40px;line-height:1.2;"></div>
+      </div>
+    `;
+
+    const styleGlitch = document.createElement("style");
+    styleGlitch.innerHTML = \`
+      @keyframes glitch {
+        0% { transform: translate(0) }
+        20% { transform: translate(-4px, 4px) }
+        40% { transform: translate(-4px, -4px) }
+        60% { transform: translate(4px, 4px) }
+        80% { transform: translate(4px, -4px) }
+        100% { transform: translate(0) }
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+      }
+      body { background-color: black !important; }
+    \`;
+    document.head.appendChild(styleGlitch);
+
+    const hackText = document.getElementById("hack-matrix");
+    const charList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*!<>{}[]";
+    
+    setInterval(() => {
+      let noise = "";
+      for (let i = 0; i < 50; i++) {
+        noise += charList.charAt(Math.floor(Math.random() * charList.length));
+      }
+      hackText.textContent = noise + "\\n" + hackText.textContent;
+      if (hackText.textContent.length > 3000) {
+        hackText.textContent = hackText.textContent.substring(0, 3000);
+      }
+    }, 30);
+  };
 });
