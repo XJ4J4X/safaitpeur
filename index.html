@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>DHARMA INITIATIVE // STATION MANOIR ANIMATO</title>
+  <title>DHARMA INITIATIVE // STATION DU TCHAT ANIMATO</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%2320C20E%22>13</text></svg>">
 </head>
@@ -12,16 +12,16 @@
   <!-- Écran de démarrage CRT -->
   <div id="boot-screen" class="screen active">
     <div class="boot-badge">
-      DHARMA INITIATIVE &bull; FONDATION HANSO<br>
-      STATION DU STREAM &mdash; MANOIR ANIMATO
+      DHARMA INITIATIVE &bull; FONDATION TWITCH<br>
+      STATION DU STREAM &mdash; LE MANOIR D'ANIMATO
     </div>
     <br><br>
     <div id="boot-btn" class="center-text blink">
-      [ CLIQUER POUR ALLUMER LE TERMINAL DU MANOIR ]
+      [ CLIQUER POUR ALLUMER LA CONSOLE DE MODÉRATION ]
     </div>
     <br><br>
     <div style="font-size: 14px; opacity: 0.6; max-width: 600px; margin: 0 auto; letter-spacing: 1px;">
-      AVERTISSEMENT : Terminal de modération des anomalies paranormales et des viewers fantômes d'Halloween. Audio recommandé.
+      AVERTISSEMENT : Terminal de modération des viewers fantômes et des screamers. Audio recommandé (Attention aux oreilles).
     </div>
   </div>
 
@@ -32,14 +32,14 @@
     <div id="dharma-hud">
       <div class="hud-item">
         <span>LOC :</span>
-        <strong style="color: var(--bright-green);">MANOIR ANIMATO [STREAM]</strong>
+        <strong style="color: var(--bright-green);">MANOIR ANIMATO [LIVE]</strong>
       </div>
       <div class="hud-item">
-        <span>COMPTEUR DU LIVE :</span>
+        <span>CHRONO DU LIVE :</span>
         <span id="hud-timer" class="hud-timer">108:00</span>
       </div>
       <div class="hud-item">
-        <span>CONFINEMENT DU TCHAT :</span>
+        <span>SÉCURITÉ DU TCHAT :</span>
         <span id="hud-progress" style="color: var(--bright-green); font-weight: bold;">0%</span>
       </div>
       <div class="hud-item">
@@ -53,13 +53,13 @@
       ___  _  _ ____ ____ _  _ ____   _ _  _ _ ___ _ ____ ___ _ _  _ ____ 
       |  \ |__| |__| |__/ |\/| |__|   | |\ | |  |  | |__|  |  | |  | |___ 
       |__/ |  | |  | |  \ |  | |  |   | | \| |  |  | |  |  |  |  \/  |___ 
-             [ STATION ANIMATO // LE MANOIR DES VIEWERS ]             
-             [ PROTOCOLE HALLOWEEN // ELECTROMAGNETIC ISOLATION ]            
+             [ LIVE ANIMATO // CHASSE AUX FANTÔMES ]             
+             [ PROTOCOLE HALLOWEEN // NO BACKSEAT ALLOWED ]            
       </div>
       =========================================================================<br>
-      SYSTEM ADMIN : ANIMATO // J4X OS - MAINFRAME CATHODIQUE<br>
-      ANOMALIE ACTIVE : VIEWERS FANTÔMES & DÉCHIFFREMENT PARANORMAL<br>
-      COMMANDES UTILES : 'aide' | 'indice' | 'otan' | 'morse' | 'dharma' | 'bip'<br>
+      MODÉRATEUR VIP : J4X OS - MAINFRAME CATHODIQUE<br>
+      ANOMALIE ACTIVE : VIEWERS TROLLS, SCREAMERS & ESPRITS FRAPPEURS<br>
+      COMMANDES UTILES : 'aide' | 'indice' | 'otan' | 'morse' | 'animato' | 'bip'<br>
       =========================================================================
     </div>
 
@@ -79,11 +79,11 @@
       <span class="shortcut-chip" data-cmd="indice">[ indice ]</span>
       <span class="shortcut-chip" data-cmd="otan">[ otan ]</span>
       <span class="shortcut-chip" data-cmd="morse">[ morse ]</span>
-      <span class="shortcut-chip" data-cmd="bip">[ bip morse ]</span>
-      <span class="shortcut-chip" data-cmd="dharma">[ dharma ]</span>
+      <span class="shortcut-chip" data-cmd="bip">[ sub alert (bip) ]</span>
+      <span class="shortcut-chip" data-cmd="animato">[ animato ]</span>
       <span class="shortcut-chip" data-cmd="manoir">[ manoir ]</span>
       <span class="shortcut-chip" data-cmd="statut">[ statut ]</span>
-      <span class="shortcut-chip" data-cmd="clear">[ effacer ]</span>
+      <span class="shortcut-chip" data-cmd="clear">[ effacer tchat ]</span>
     </div>
 
   </div>
@@ -91,8 +91,8 @@
   <!-- Input invisible pour capturer la saisie physique et tactile / mobile -->
   <input type="text" id="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 
-  <script src="audio.js"></script>
-  <script src="riddles.js"></script>
-  <script src="terminal.js"></script>
+  <script src="sons.js"></script>
+  <script src="enigmes.js"></script>
+  <script src="systeme.js"></script>
 </body>
 </html>
