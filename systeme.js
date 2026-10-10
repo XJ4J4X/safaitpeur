@@ -594,21 +594,21 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- EASTER EGG : KONAMI CODE (HACK / CRASH) ---
-  const sequenceKonami = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
-  let indexKonami = 0;
+  const sequenceKonami = 'ArrowUp,ArrowUp,ArrowDown,ArrowDown,ArrowLeft,ArrowRight,ArrowLeft,ArrowRight';
+  const sequenceKonamiBA = sequenceKonami + ',b,a';
+  let historiqueTouches = [];
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === sequenceKonami[indexKonami]) {
-      indexKonami++;
-      if (indexKonami === sequenceKonami.length) {
-        declencherHackSysteme();
-        indexKonami = 0;
-      }
-    } else {
-      indexKonami = 0;
-      if (e.key === sequenceKonami[0]) indexKonami = 1;
+  window.addEventListener('keydown', (e) => {
+    historiqueTouches.push(e.key.length === 1 ? e.key.toLowerCase() : e.key);
+    if (historiqueTouches.length > 15) historiqueTouches.shift();
+
+    const touchesStr = historiqueTouches.join(',');
+    
+    if (touchesStr.includes(sequenceKonamiBA) || touchesStr.includes(sequenceKonami)) {
+      declencherHackSysteme();
+      historiqueTouches = []; // Reset pour éviter les déclenchements multiples
     }
-  });
+  }, { capture: true });
 
   const declencherHackSysteme = () => {
     if (window.audioTerminal) {
