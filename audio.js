@@ -1,47 +1,49 @@
-// Advanced Web Audio API procedural sound engine for retro CRT terminal
-// Theme: DHARMA Initiative x Haunted Manor & Halloween
-class TerminalAudio {
+// =============================================================================
+// Moteur audio procédural Web Audio API pour le terminal rétro
+// Thème: DHARMA Initiative x Manoir d'Animato (Viewers Fantômes)
+// =============================================================================
+
+class AudioTerminal {
   constructor() {
-    this.ctx = null;
-    this.enabled = true;
-    this.ambientActive = false;
-    this.ambientNode = null;
-    this.ambientGain = null;
+    this.contexte = null;
+    this.actif = true;
+    this.ambianceActive = false;
+    this.noeudAmbiance = null;
+    this.gainAmbiance = null;
   }
 
-  init() {
-    if (!this.ctx) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (AudioCtx) {
-        this.ctx = new AudioCtx();
+  initialiser() {
+    if (!this.contexte) {
+      const ContexteAudio = window.AudioContext || window.webkitAudioContext;
+      if (ContexteAudio) {
+        this.contexte = new ContexteAudio();
       }
     }
-    if (this.ctx && this.ctx.state === "suspended") {
-      this.ctx.resume();
+    if (this.contexte && this.contexte.state === "suspended") {
+      this.contexte.resume();
     }
   }
 
-  toggle() {
-    this.enabled = !this.enabled;
-    if (!this.enabled && this.ambientNode) {
-      this.stopAmbientHum();
-    } else if (this.enabled && this.ambientActive) {
-      this.startAmbientHum();
+  basculerSon() {
+    this.actif = !this.actif;
+    if (!this.actif && this.noeudAmbiance) {
+      this.arreterBruitDeFond();
+    } else if (this.actif && this.ambianceActive) {
+      this.demarrerBruitDeFond();
     }
-    return this.enabled;
+    return this.actif;
   }
 
-  // 1. Heavy mechanical CRT Power Switch click
-  playPowerSwitch() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 1. Bruit mécanique d'allumage
+  jouerBruitAllumage() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
+    const t = this.contexte.currentTime;
 
-    // Heavy mechanical relay clack (short burst + low resonance)
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
+    const osc = this.contexte.createOscillator();
+    const gain = this.contexte.createGain();
     osc.type = "square";
     osc.frequency.setValueAtTime(120, t);
     osc.frequency.exponentialRampToValueAtTime(30, t + 0.08);
@@ -50,186 +52,185 @@ class TerminalAudio {
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
 
     osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    gain.connect(this.contexte.destination);
     osc.start(t);
     osc.stop(t + 0.08);
 
-    // High snap
-    const snap = this.ctx.createOscillator();
-    const snapGain = this.ctx.createGain();
-    snap.type = "triangle";
-    snap.frequency.setValueAtTime(1600, t);
-    snap.frequency.exponentialRampToValueAtTime(200, t + 0.03);
+    const claquement = this.contexte.createOscillator();
+    const gainClaquement = this.contexte.createGain();
+    claquement.type = "triangle";
+    claquement.frequency.setValueAtTime(1600, t);
+    claquement.frequency.exponentialRampToValueAtTime(200, t + 0.03);
 
-    snapGain.gain.setValueAtTime(0.18, t);
-    snapGain.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
+    gainClaquement.gain.setValueAtTime(0.18, t);
+    gainClaquement.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
 
-    snap.connect(snapGain);
-    snapGain.connect(this.ctx.destination);
-    snap.start(t);
-    snap.stop(t + 0.03);
+    claquement.connect(gainClaquement);
+    gainClaquement.connect(this.contexte.destination);
+    claquement.start(t);
+    claquement.stop(t + 0.03);
   }
 
-  // 2. High-voltage CRT flyback transformer squeal & capacitor charge
-  playCrtPowerUp() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 2. Sifflement haute tension du tube cathodique
+  jouerAlimentationCathodique() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
+    const t = this.contexte.currentTime;
 
-    const flyback = this.ctx.createOscillator();
-    const flybackGain = this.ctx.createGain();
-    flyback.type = "sine";
-    flyback.frequency.setValueAtTime(15600, t);
-    flyback.frequency.exponentialRampToValueAtTime(12000, t + 0.7);
+    const sifflement = this.contexte.createOscillator();
+    const gainSifflement = this.contexte.createGain();
+    sifflement.type = "sine";
+    sifflement.frequency.setValueAtTime(15600, t);
+    sifflement.frequency.exponentialRampToValueAtTime(12000, t + 0.7);
 
-    flybackGain.gain.setValueAtTime(0.001, t);
-    flybackGain.gain.exponentialRampToValueAtTime(0.06, t + 0.15);
-    flybackGain.gain.exponentialRampToValueAtTime(0.002, t + 0.8);
+    gainSifflement.gain.setValueAtTime(0.001, t);
+    gainSifflement.gain.exponentialRampToValueAtTime(0.06, t + 0.15);
+    gainSifflement.gain.exponentialRampToValueAtTime(0.002, t + 0.8);
 
-    flyback.connect(flybackGain);
-    flybackGain.connect(this.ctx.destination);
-    flyback.start(t);
-    flyback.stop(t + 0.85);
+    sifflement.connect(gainSifflement);
+    gainSifflement.connect(this.contexte.destination);
+    sifflement.start(t);
+    sifflement.stop(t + 0.85);
 
-    const hum = this.ctx.createOscillator();
-    const humGain = this.ctx.createGain();
-    hum.type = "sawtooth";
-    hum.frequency.setValueAtTime(50, t);
-    hum.frequency.linearRampToValueAtTime(80, t + 0.4);
-    hum.frequency.exponentialRampToValueAtTime(50, t + 0.9);
+    const bourdonnement = this.contexte.createOscillator();
+    const gainBourdonnement = this.contexte.createGain();
+    bourdonnement.type = "sawtooth";
+    bourdonnement.frequency.setValueAtTime(50, t);
+    bourdonnement.frequency.linearRampToValueAtTime(80, t + 0.4);
+    bourdonnement.frequency.exponentialRampToValueAtTime(50, t + 0.9);
 
-    humGain.gain.setValueAtTime(0.001, t);
-    humGain.gain.linearRampToValueAtTime(0.08, t + 0.3);
-    humGain.gain.exponentialRampToValueAtTime(0.001, t + 0.9);
+    gainBourdonnement.gain.setValueAtTime(0.001, t);
+    gainBourdonnement.gain.linearRampToValueAtTime(0.08, t + 0.3);
+    gainBourdonnement.gain.exponentialRampToValueAtTime(0.001, t + 0.9);
 
-    hum.connect(humGain);
-    humGain.connect(this.ctx.destination);
-    hum.start(t);
-    hum.stop(t + 0.95);
+    bourdonnement.connect(gainBourdonnement);
+    gainBourdonnement.connect(this.contexte.destination);
+    bourdonnement.start(t);
+    bourdonnement.stop(t + 0.95);
   }
 
-  // 3. Subtle ambient 50Hz CRT electrical hum
-  startAmbientHum() {
-    if (!this.enabled || this.ambientNode) return;
-    this.init();
-    if (!this.ctx) return;
+  // 3. Bourdonnement électrique ambiant 50Hz
+  demarrerBruitDeFond() {
+    if (!this.actif || this.noeudAmbiance) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    this.ambientActive = true;
-    const t = this.ctx.currentTime;
+    this.ambianceActive = true;
+    const t = this.contexte.currentTime;
 
-    const osc = this.ctx.createOscillator();
-    const filter = this.ctx.createBiquadFilter();
-    const gain = this.ctx.createGain();
+    const osc = this.contexte.createOscillator();
+    const filtre = this.contexte.createBiquadFilter();
+    const gain = this.contexte.createGain();
 
     osc.type = "sawtooth";
     osc.frequency.setValueAtTime(55, t);
 
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(160, t);
+    filtre.type = "lowpass";
+    filtre.frequency.setValueAtTime(160, t);
 
     gain.gain.setValueAtTime(0.001, t);
     gain.gain.linearRampToValueAtTime(0.015, t + 2);
 
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.ctx.destination);
+    osc.connect(filtre);
+    filtre.connect(gain);
+    gain.connect(this.contexte.destination);
 
     osc.start(t);
-    this.ambientNode = osc;
-    this.ambientGain = gain;
+    this.noeudAmbiance = osc;
+    this.gainAmbiance = gain;
   }
 
-  stopAmbientHum() {
-    if (this.ambientGain && this.ctx) {
+  arreterBruitDeFond() {
+    if (this.gainAmbiance && this.contexte) {
       try {
-        const t = this.ctx.currentTime;
-        this.ambientGain.gain.linearRampToValueAtTime(0.001, t + 0.5);
+        const t = this.contexte.currentTime;
+        this.gainAmbiance.gain.linearRampToValueAtTime(0.001, t + 0.5);
         setTimeout(() => {
-          if (this.ambientNode) {
-            this.ambientNode.stop();
-            this.ambientNode.disconnect();
-            this.ambientNode = null;
-            this.ambientGain = null;
+          if (this.noeudAmbiance) {
+            this.noeudAmbiance.stop();
+            this.noeudAmbiance.disconnect();
+            this.noeudAmbiance = null;
+            this.gainAmbiance = null;
           }
         }, 500);
       } catch (e) {}
     }
   }
 
-  // 4. Mechanical Keyboard Keystroke
-  playKeyClick(isSpace = false) {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 4. Clic du clavier mécanique
+  jouerClicTouche(estEspace = false) {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
+    const t = this.contexte.currentTime;
 
-    const click = this.ctx.createOscillator();
-    const clickGain = this.ctx.createGain();
-    click.type = "triangle";
+    const clic = this.contexte.createOscillator();
+    const gainClic = this.contexte.createGain();
+    clic.type = "triangle";
     
-    const baseFreq = isSpace ? 320 : 650 + (Math.random() * 300 - 150);
-    click.frequency.setValueAtTime(baseFreq, t);
-    click.frequency.exponentialRampToValueAtTime(120, t + 0.025);
+    const frequenceBase = estEspace ? 320 : 650 + (Math.random() * 300 - 150);
+    clic.frequency.setValueAtTime(frequenceBase, t);
+    clic.frequency.exponentialRampToValueAtTime(120, t + 0.025);
 
-    clickGain.gain.setValueAtTime(isSpace ? 0.09 : 0.06, t);
-    clickGain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+    gainClic.gain.setValueAtTime(estEspace ? 0.09 : 0.06, t);
+    gainClic.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
 
-    click.connect(clickGain);
-    clickGain.connect(this.ctx.destination);
-    click.start(t);
-    click.stop(t + 0.025);
+    clic.connect(gainClic);
+    gainClic.connect(this.contexte.destination);
+    clic.start(t);
+    clic.stop(t + 0.025);
 
-    const thud = this.ctx.createOscillator();
-    const thudGain = this.ctx.createGain();
-    thud.type = "sine";
-    thud.frequency.setValueAtTime(isSpace ? 110 : 210 + Math.random() * 40, t);
-    thud.frequency.exponentialRampToValueAtTime(40, t + 0.04);
+    const choc = this.contexte.createOscillator();
+    const gainChoc = this.contexte.createGain();
+    choc.type = "sine";
+    choc.frequency.setValueAtTime(estEspace ? 110 : 210 + Math.random() * 40, t);
+    choc.frequency.exponentialRampToValueAtTime(40, t + 0.04);
 
-    thudGain.gain.setValueAtTime(0.04, t);
-    thudGain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+    gainChoc.gain.setValueAtTime(0.04, t);
+    gainChoc.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
 
-    thud.connect(thudGain);
-    thudGain.connect(this.ctx.destination);
-    thud.start(t);
-    thud.stop(t + 0.04);
+    choc.connect(gainChoc);
+    gainChoc.connect(this.contexte.destination);
+    choc.start(t);
+    choc.stop(t + 0.04);
   }
 
-  // 5. High-tech teletype data stream chirp
-  playDataChirp() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 5. Gazouillis de transfert de données
+  jouerBruitDonnees() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
+    const t = this.contexte.currentTime;
+    const osc = this.contexte.createOscillator();
+    const gain = this.contexte.createGain();
 
     osc.type = "sine";
-    const freqs = [1800, 2100, 2400, 2700, 1500];
-    const freq = freqs[Math.floor(Math.random() * freqs.length)];
-    osc.frequency.setValueAtTime(freq, t);
+    const frequences = [1800, 2100, 2400, 2700, 1500];
+    const frequence = frequences[Math.floor(Math.random() * frequences.length)];
+    osc.frequency.setValueAtTime(frequence, t);
 
     gain.gain.setValueAtTime(0.02, t);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.02);
 
     osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    gain.connect(this.contexte.destination);
     osc.start(t);
     osc.stop(t + 0.02);
   }
 
-  // 6. Enter command affirmation beep
-  playEnter() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 6. Bip de validation (Entrée)
+  jouerBipValidation() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
+    const t = this.contexte.currentTime;
+    const osc = this.contexte.createOscillator();
+    const gain = this.contexte.createGain();
 
     osc.type = "sine";
     osc.frequency.setValueAtTime(880, t);
@@ -239,130 +240,130 @@ class TerminalAudio {
     gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
 
     osc.connect(gain);
-    gain.connect(this.ctx.destination);
+    gain.connect(this.contexte.destination);
     osc.start(t);
     osc.stop(t + 0.08);
   }
 
-  // 7. Dramatic Error Glitch
-  playErrorGlitch() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 7. Erreur dramatique / Glitch
+  jouerErreurGlitch() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
+    const t = this.contexte.currentTime;
 
-    const sub = this.ctx.createOscillator();
-    const subGain = this.ctx.createGain();
-    sub.type = "sawtooth";
-    sub.frequency.setValueAtTime(120, t);
-    sub.frequency.exponentialRampToValueAtTime(35, t + 0.35);
+    const grave = this.contexte.createOscillator();
+    const gainGrave = this.contexte.createGain();
+    grave.type = "sawtooth";
+    grave.frequency.setValueAtTime(120, t);
+    grave.frequency.exponentialRampToValueAtTime(35, t + 0.35);
 
-    subGain.gain.setValueAtTime(0.2, t);
-    subGain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    gainGrave.gain.setValueAtTime(0.2, t);
+    gainGrave.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
 
-    sub.connect(subGain);
-    subGain.connect(this.ctx.destination);
-    sub.start(t);
-    sub.stop(t + 0.35);
+    grave.connect(gainGrave);
+    gainGrave.connect(this.contexte.destination);
+    grave.start(t);
+    grave.stop(t + 0.35);
 
-    const buzz = this.ctx.createOscillator();
-    const buzzGain = this.ctx.createGain();
-    buzz.type = "sawtooth";
-    buzz.frequency.setValueAtTime(95, t);
-    buzz.frequency.setValueAtTime(80, t + 0.12);
+    const bourdonnement = this.contexte.createOscillator();
+    const gainBourdon = this.contexte.createGain();
+    bourdonnement.type = "sawtooth";
+    bourdonnement.frequency.setValueAtTime(95, t);
+    bourdonnement.frequency.setValueAtTime(80, t + 0.12);
 
-    buzzGain.gain.setValueAtTime(0.15, t);
-    buzzGain.gain.exponentialRampToValueAtTime(0.01, t + 0.28);
+    gainBourdon.gain.setValueAtTime(0.15, t);
+    gainBourdon.gain.exponentialRampToValueAtTime(0.01, t + 0.28);
 
-    buzz.connect(buzzGain);
-    buzzGain.connect(this.ctx.destination);
-    buzz.start(t);
-    buzz.stop(t + 0.3);
+    bourdonnement.connect(gainBourdon);
+    gainBourdon.connect(this.contexte.destination);
+    bourdonnement.start(t);
+    bourdonnement.stop(t + 0.3);
 
     try {
-      const bufferSize = this.ctx.sampleRate * 0.18;
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const output = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        output[i] = Math.random() * 2 - 1;
+      const tailleBuffer = this.contexte.sampleRate * 0.18;
+      const buffer = this.contexte.createBuffer(1, tailleBuffer, this.contexte.sampleRate);
+      const donnees = buffer.getChannelData(0);
+      for (let i = 0; i < tailleBuffer; i++) {
+        donnees[i] = Math.random() * 2 - 1;
       }
 
-      const whiteNoise = this.ctx.createBufferSource();
-      whiteNoise.buffer = buffer;
+      const bruitBlanc = this.contexte.createBufferSource();
+      bruitBlanc.buffer = buffer;
 
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1000, t);
-      filter.Q.setValueAtTime(2, t);
+      const filtre = this.contexte.createBiquadFilter();
+      filtre.type = "bandpass";
+      filtre.frequency.setValueAtTime(1000, t);
+      filtre.Q.setValueAtTime(2, t);
 
-      const noiseGain = this.ctx.createGain();
-      noiseGain.gain.setValueAtTime(0.09, t);
-      noiseGain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+      const gainBruit = this.contexte.createGain();
+      gainBruit.gain.setValueAtTime(0.09, t);
+      gainBruit.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
 
-      whiteNoise.connect(filter);
-      filter.connect(noiseGain);
-      noiseGain.connect(this.ctx.destination);
+      bruitBlanc.connect(filtre);
+      filtre.connect(gainBruit);
+      gainBruit.connect(this.contexte.destination);
 
-      whiteNoise.start(t);
-      whiteNoise.stop(t + 0.18);
+      bruitBlanc.start(t);
+      bruitBlanc.stop(t + 0.18);
     } catch (e) {}
   }
 
-  // 8. Glorious Victory / Unlock Chime
-  playSuccessArp() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 8. Son de victoire mystérieux
+  jouerSonVictoire() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
+    const t = this.contexte.currentTime;
     const notes = [293.66, 369.99, 440.00, 587.33, 659.25, 880.00];
 
-    notes.forEach((freq, idx) => {
-      const noteTime = t + idx * 0.08;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
+    notes.forEach((frequence, index) => {
+      const tempsNote = t + index * 0.08;
+      const osc = this.contexte.createOscillator();
+      const gain = this.contexte.createGain();
 
-      osc.type = idx % 2 === 0 ? "sine" : "triangle";
-      osc.frequency.setValueAtTime(freq, noteTime);
+      osc.type = index % 2 === 0 ? "sine" : "triangle";
+      osc.frequency.setValueAtTime(frequence, tempsNote);
 
-      gain.gain.setValueAtTime(0.001, noteTime);
-      gain.gain.linearRampToValueAtTime(0.12, noteTime + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.001, noteTime + 0.45);
+      gain.gain.setValueAtTime(0.001, tempsNote);
+      gain.gain.linearRampToValueAtTime(0.12, tempsNote + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, tempsNote + 0.45);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.contexte.destination);
 
-      osc.start(noteTime);
-      osc.stop(noteTime + 0.5);
+      osc.start(tempsNote);
+      osc.stop(tempsNote + 0.5);
     });
 
-    const sub = this.ctx.createOscillator();
-    const subGain = this.ctx.createGain();
-    sub.type = "sine";
-    sub.frequency.setValueAtTime(73.42, t);
-    sub.frequency.linearRampToValueAtTime(146.83, t + 0.5);
+    const grave = this.contexte.createOscillator();
+    const gainGrave = this.contexte.createGain();
+    grave.type = "sine";
+    grave.frequency.setValueAtTime(73.42, t);
+    grave.frequency.linearRampToValueAtTime(146.83, t + 0.5);
 
-    subGain.gain.setValueAtTime(0.001, t);
-    subGain.gain.linearRampToValueAtTime(0.1, t + 0.15);
-    subGain.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
+    gainGrave.gain.setValueAtTime(0.001, t);
+    gainGrave.gain.linearRampToValueAtTime(0.1, t + 0.15);
+    gainGrave.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
 
-    sub.connect(subGain);
-    subGain.connect(this.ctx.destination);
-    sub.start(t);
-    sub.stop(t + 0.7);
+    grave.connect(gainGrave);
+    gainGrave.connect(this.contexte.destination);
+    grave.start(t);
+    grave.stop(t + 0.7);
   }
 
-  // 9. Evil Digital Laugh
-  playLaugh() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 9. Rire démoniaque
+  jouerRireDiabolique() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
+    const t = this.contexte.currentTime;
     for (let i = 0; i < 7; i++) {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
+      const osc = this.contexte.createOscillator();
+      const gain = this.contexte.createGain();
       osc.type = "sawtooth";
       osc.frequency.setValueAtTime(180 - (i * 12), t + i * 0.15); 
       osc.frequency.exponentialRampToValueAtTime(60, t + i * 0.15 + 0.1);
@@ -371,143 +372,139 @@ class TerminalAudio {
       gain.gain.exponentialRampToValueAtTime(0.01, t + i * 0.15 + 0.1);
       
       osc.connect(gain); 
-      gain.connect(this.ctx.destination);
+      gain.connect(this.contexte.destination);
       osc.start(t + i * 0.15); 
       osc.stop(t + i * 0.15 + 0.1);
     }
   }
 
-  // 10. REAL MORSE TELEGRAPH TONE GENERATOR (750 Hz CW Beeps)
-  playMorse(morseStr, onDone = null) {
-    if (!this.enabled) {
-      if (onDone) onDone();
+  // 10. Générateur de Morse (Bips CW à 750 Hz)
+  jouerMorse(morseStr, aLaFin = null) {
+    if (!this.actif) {
+      if (aLaFin) aLaFin();
       return;
     }
-    this.init();
-    if (!this.ctx) {
-      if (onDone) onDone();
+    this.initialiser();
+    if (!this.contexte) {
+      if (aLaFin) aLaFin();
       return;
     }
 
-    const dotDuration = 0.08; // 80ms standard dot
-    const dashDuration = dotDuration * 3; // 240ms dash
-    const intraCharPause = dotDuration;
-    const interCharPause = dotDuration * 3;
-    const interWordPause = dotDuration * 7;
-    const freq = 750;
+    const dureePoint = 0.08; 
+    const dureeTrait = dureePoint * 3; 
+    const pauseEntreSymboles = dureePoint;
+    const pauseEntreLettres = dureePoint * 3;
+    const pauseEntreMots = dureePoint * 7;
+    const frequence = 750;
 
-    let time = this.ctx.currentTime + 0.05;
+    let temps = this.contexte.currentTime + 0.05;
 
-    // Split words by space or slash
-    const parts = morseStr.trim().split(/\s+/);
-    parts.forEach((symbolGroup) => {
-      for (let i = 0; i < symbolGroup.length; i++) {
-        const symbol = symbolGroup[i];
-        if (symbol === '.' || symbol === '-') {
-          const dur = symbol === '-' ? dashDuration : dotDuration;
+    const mots = morseStr.trim().split(/\s+/);
+    mots.forEach((groupe) => {
+      for (let i = 0; i < groupe.length; i++) {
+        const symbole = groupe[i];
+        if (symbole === '.' || symbole === '-') {
+          const duree = symbole === '-' ? dureeTrait : dureePoint;
 
-          const osc = this.ctx.createOscillator();
-          const gain = this.ctx.createGain();
+          const osc = this.contexte.createOscillator();
+          const gain = this.contexte.createGain();
           osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, time);
+          osc.frequency.setValueAtTime(frequence, temps);
 
-          // Smooth attack and release to avoid sharp pops
-          gain.gain.setValueAtTime(0.001, time);
-          gain.gain.linearRampToValueAtTime(0.12, time + 0.006);
-          gain.gain.setValueAtTime(0.12, time + dur - 0.006);
-          gain.gain.linearRampToValueAtTime(0.001, time + dur);
+          gain.gain.setValueAtTime(0.001, temps);
+          gain.gain.linearRampToValueAtTime(0.12, temps + 0.006);
+          gain.gain.setValueAtTime(0.12, temps + duree - 0.006);
+          gain.gain.linearRampToValueAtTime(0.001, temps + duree);
 
           osc.connect(gain);
-          gain.connect(this.ctx.destination);
+          gain.connect(this.contexte.destination);
 
-          osc.start(time);
-          osc.stop(time + dur + 0.01);
+          osc.start(temps);
+          osc.stop(temps + duree + 0.01);
 
-          time += dur + intraCharPause;
-        } else if (symbol === '/') {
-          time += interWordPause;
+          temps += duree + pauseEntreSymboles;
+        } else if (symbole === '/') {
+          temps += pauseEntreMots;
         }
       }
-      time += interCharPause;
+      temps += pauseEntreLettres;
     });
 
-    if (onDone) {
-      const waitMs = Math.max(100, (time - this.ctx.currentTime) * 1000);
-      setTimeout(onDone, waitMs);
+    if (aLaFin) {
+      const delaiMs = Math.max(100, (temps - this.contexte.currentTime) * 1000);
+      setTimeout(aLaFin, delaiMs);
     }
   }
 
-  // 11. LOST SWAN STATION HORN / ALARM (The 108 minute countdown klaxon)
-  playDharmaAlarm() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 11. Alarme DHARMA (Station Le Cygne)
+  jouerAlarmeDharma() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
-    // Iconic two-tone urgent klaxon blast: 440 Hz -> 587 Hz
-    const tones = [
+    const t = this.contexte.currentTime;
+    const tonalites = [
       { f: 440, dur: 0.28 },
       { f: 587, dur: 0.35 }
     ];
 
-    let toneTime = t;
-    tones.forEach((tone, idx) => {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
+    let tempsTon = t;
+    tonalites.forEach((ton) => {
+      const osc = this.contexte.createOscillator();
+      const gain = this.contexte.createGain();
 
       osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(tone.f, toneTime);
+      osc.frequency.setValueAtTime(ton.f, tempsTon);
 
-      gain.gain.setValueAtTime(0.001, toneTime);
-      gain.gain.linearRampToValueAtTime(0.2, toneTime + 0.02);
-      gain.gain.setValueAtTime(0.2, toneTime + tone.dur - 0.03);
-      gain.gain.linearRampToValueAtTime(0.001, toneTime + tone.dur);
+      gain.gain.setValueAtTime(0.001, tempsTon);
+      gain.gain.linearRampToValueAtTime(0.2, tempsTon + 0.02);
+      gain.gain.setValueAtTime(0.2, tempsTon + ton.dur - 0.03);
+      gain.gain.linearRampToValueAtTime(0.001, tempsTon + ton.dur);
 
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.contexte.destination);
 
-      osc.start(toneTime);
-      osc.stop(toneTime + tone.dur + 0.02);
+      osc.start(tempsTon);
+      osc.stop(tempsTon + ton.dur + 0.02);
 
-      toneTime += tone.dur + 0.05;
+      tempsTon += ton.dur + 0.05;
     });
   }
 
-  // 12. Eerie Ghost Whisper / Spectral Ectoplasm sweep
-  playGhostWhisper() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 12. Murmure fantomatique / Balayage d'ectoplasme
+  jouerMurmureFantome() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
-    const osc = this.ctx.createOscillator();
-    const lfo = this.ctx.createOscillator();
-    const lfoGain = this.ctx.createGain();
-    const filter = this.ctx.createBiquadFilter();
-    const gain = this.ctx.createGain();
+    const t = this.contexte.currentTime;
+    const osc = this.contexte.createOscillator();
+    const lfo = this.contexte.createOscillator();
+    const gainLfo = this.contexte.createGain();
+    const filtre = this.contexte.createBiquadFilter();
+    const gain = this.contexte.createGain();
 
     osc.type = "sine";
     osc.frequency.setValueAtTime(320, t);
     osc.frequency.linearRampToValueAtTime(540, t + 0.8);
     osc.frequency.exponentialRampToValueAtTime(260, t + 1.8);
 
-    // Eerie tremolo / ghostly vibrato
     lfo.type = "sine";
     lfo.frequency.setValueAtTime(5.5, t);
-    lfoGain.gain.setValueAtTime(40, t);
+    gainLfo.gain.setValueAtTime(40, t);
     lfo.connect(osc.frequency);
 
-    filter.type = "bandpass";
-    filter.frequency.setValueAtTime(450, t);
-    filter.Q.setValueAtTime(3, t);
+    filtre.type = "bandpass";
+    filtre.frequency.setValueAtTime(450, t);
+    filtre.Q.setValueAtTime(3, t);
 
     gain.gain.setValueAtTime(0.001, t);
     gain.gain.linearRampToValueAtTime(0.08, t + 0.5);
     gain.gain.exponentialRampToValueAtTime(0.001, t + 1.8);
 
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.ctx.destination);
+    osc.connect(filtre);
+    filtre.connect(gain);
+    gain.connect(this.contexte.destination);
 
     lfo.start(t);
     osc.start(t);
@@ -515,41 +512,41 @@ class TerminalAudio {
     osc.stop(t + 1.85);
   }
 
-  // 13. Deep Thunder Rumble over Haunted Manor
-  playThunder() {
-    if (!this.enabled) return;
-    this.init();
-    if (!this.ctx) return;
+  // 13. Tonnerre lointain
+  jouerTonnerre() {
+    if (!this.actif) return;
+    this.initialiser();
+    if (!this.contexte) return;
 
-    const t = this.ctx.currentTime;
+    const t = this.contexte.currentTime;
     try {
-      const bufferSize = this.ctx.sampleRate * 1.5;
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (this.ctx.sampleRate * 0.5));
+      const tailleBuffer = this.contexte.sampleRate * 1.5;
+      const buffer = this.contexte.createBuffer(1, tailleBuffer, this.contexte.sampleRate);
+      const donnees = buffer.getChannelData(0);
+      for (let i = 0; i < tailleBuffer; i++) {
+        donnees[i] = (Math.random() * 2 - 1) * Math.exp(-i / (this.contexte.sampleRate * 0.5));
       }
 
-      const noise = this.ctx.createBufferSource();
-      noise.buffer = buffer;
+      const bruit = this.contexte.createBufferSource();
+      bruit.buffer = buffer;
 
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(140, t);
-      filter.frequency.exponentialRampToValueAtTime(50, t + 1.4);
+      const filtre = this.contexte.createBiquadFilter();
+      filtre.type = "lowpass";
+      filtre.frequency.setValueAtTime(140, t);
+      filtre.frequency.exponentialRampToValueAtTime(50, t + 1.4);
 
-      const gain = this.ctx.createGain();
+      const gain = this.contexte.createGain();
       gain.gain.setValueAtTime(0.25, t);
       gain.gain.exponentialRampToValueAtTime(0.001, t + 1.5);
 
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.ctx.destination);
+      bruit.connect(filtre);
+      filtre.connect(gain);
+      gain.connect(this.contexte.destination);
 
-      noise.start(t);
-      noise.stop(t + 1.5);
+      bruit.start(t);
+      bruit.stop(t + 1.5);
     } catch (e) {}
   }
 }
 
-window.terminalAudio = new TerminalAudio();
+window.audioTerminal = new AudioTerminal();
